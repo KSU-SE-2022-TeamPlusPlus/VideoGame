@@ -1,3 +1,0 @@
-snake
-pong
-fall down(move a ball left or right to fall through moving platforms)
