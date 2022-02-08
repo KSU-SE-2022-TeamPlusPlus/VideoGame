@@ -2,3 +2,8 @@ pong
 snake
 fall down (move left or right to make a ball drop down through moving
 platforms)
+tetris lookalike
+chess?
+endless runner
+basketball shooter
+pool/billiards/maybe table hockey (kinda similar to pong
