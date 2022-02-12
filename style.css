@@ -1,7 +1,30 @@
-html, body {
-  margin: 0;
-  padding: 0;
+* {
+	box-sizing: border-box;
 }
-canvas {
-  display: block;
+
+html, body {
+	margin: 0;
+	padding: 0;
+	min-height: 75vh;
+	background-color: black;
+	font-family: sans-serif;
+	color: white;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+main {
+	display: block;
+	position: relative;
+	border: solid 1px white;
+	padding: 1px;
+	overflow: hidden;
+}
+main > canvas {
+	display: block;
 }
