@@ -66,7 +66,7 @@ function draw() {
   image(bgImg, x1, 0, width, height);
   image(bgImg, x2, 0, width, height);
   
-  if (currentBall==1){
+  if (currentBall==1){ //image unused to make scrolling look more smooth, skips b2 and re starts when rotated back to currentball=2
       character = b1;
     }
     else if (currentBall==2){
@@ -98,13 +98,13 @@ function draw() {
     }
   else if (currentBall==11){
       character = b11;
-    currentBall=1;
+    currentBall=1; //go back to beginning
     }
     image(character,100,255,80,80);
   temphold=temphold+1;
-  if (temphold>=6){
-  currentBall=currentBall+1;
-    temphold=0;
+  if (temphold>=6){ //slows rotation of ball
+  currentBall=currentBall+1; //go to next ball image to spin
+    temphold=0; 
   }
   keyPressed();
 
