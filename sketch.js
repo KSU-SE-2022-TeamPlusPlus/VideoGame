@@ -6,13 +6,15 @@ let time = 0;
 const CANVAS_SIZE = new p5.Vector(800, 400);
 
 // Graphics
-let gfxBall = [];
+let gfxBall;
 let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 
 // Animation
 let ballFrame = 0;
 let runnerFrame = 0;
+
+const BALL_SIZE = new p5.Vector(64, 64);
 
 var x1 = 0;
 var x2;
@@ -27,10 +29,7 @@ function preload() {
 	
 	gfxBackground = loadImage("assets/backgroundsky.png");
 	
-	gfxBall = [];
-	for (let i = 1; i <= 11; i++) {
-		gfxBall.push(loadImage(`assets/b${12 - i}.png`));
-	}
+	gfxBall = loadImage("assets/basketball.png");
 	
 	gfxRunner = [];
 	for (let i = 0; i < 15; i++) {
@@ -89,8 +88,11 @@ function draw() {
 	image(gfxRunner[runnerFrame], 15, 205, 130, 130);
 	
 	// Ball animation and drawing
-	ballFrame = (ballFrame + 1) % gfxBall.length;
-	image(gfxBall[ballFrame], 210, 303, 30, 30);
+	push(); // Push new transform context
+	translate(225, 333 - BALL_SIZE.y / 2);
+	rotate(time * Math.PI * 2); // = 1 revolution per second
+	image(gfxBall, -BALL_SIZE.x / 2, -BALL_SIZE.y / 2, BALL_SIZE.x, BALL_SIZE.y);
+	pop(); // Restore previous transform context
 }
 
 function keyPressed() {
