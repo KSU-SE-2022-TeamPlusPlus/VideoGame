@@ -1,3 +1,5 @@
+/// <reference path="p5_definitions/p5.global-mode.d.ts" />
+
 // Scrolling background with basketball
 // Team++
 
@@ -11,7 +13,6 @@ let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 
 // Animation
-let ballFrame = 0;
 let runnerFrame = 0;
 
 const BALL_SIZE = new p5.Vector(64, 64);
