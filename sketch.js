@@ -11,8 +11,8 @@ let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 
 // Animation
-let ballFrame;
-let runnerFrame;
+let ballFrame = 0;
+let runnerFrame = 0;
 
 var x1 = 0;
 var x2;
@@ -34,7 +34,8 @@ function preload() {
 	
 	gfxRunner = [];
 	for (let i = 0; i < 15; i++) {
-		gfxRunner.push(loadImage(`assets/tile${i.toString().padStart(3, '0')}.png`));
+		let paddedNumber = i.toString().padStart(3, '0');
+		gfxRunner.push(loadImage(`assets/tile${paddedNumber}.png`));
 	}
 }
 
