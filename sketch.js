@@ -34,8 +34,7 @@ function preload() {
 	
 	gfxRunner = [];
 	for (let i = 0; i < 15; i++) {
-		let paddedNumber = i.toString().padStart(3, '0');
-		gfxRunner.push(loadImage(`assets/tile${paddedNumber}.png`));
+		gfxRunner.push(loadImage(`assets/runner${i}.png`));
 	}
 }
 
