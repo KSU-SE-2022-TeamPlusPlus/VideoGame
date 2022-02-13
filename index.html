@@ -9,6 +9,28 @@
 	</head>
 	<body>
 		<h3>Video Game</h3>
+		<pre id="errContainer" style="display: none;">~~ Errors ~~<code id="err">None yet.</code>~~~~~~~~~~~~</pre>
+		<pre id="p5_loading">Loading sketch...</pre>
+		<script>
+			(function() {
+				let errorContainer = document.getElementById("errContainer");
+				let errorOutput = document.getElementById("err");
+				let overwrite = true;
+				function disableOverwrite() {
+					errorContainer.classList.add("errored");
+					overwrite = false;
+				}
+				function logToHTMLErrors(msg = "[Uhhhh]") {
+					errorContainer.style.display = "block";
+					if (overwrite) { errorOutput.textContent = msg; disableOverwrite() }
+					else { errorOutput.textContent += "\n" + msg; }
+				}
+				window.addEventListener("error", e=>{
+					let msg = `${e.filename.slice(e.filename.lastIndexOf("/"))} @${e.lineno}: ${e.message}`;
+					logToHTMLErrors(msg);
+				});
+			})();
+		</script>
 		<script src="sketch.js"></script>
 	</body>
 </html>

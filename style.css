@@ -28,3 +28,23 @@ main {
 main > canvas {
 	display: block;
 }
+
+pre {
+	color: gray;
+	text-align: center;
+	font-size: 9pt;
+}
+pre.errored {
+	color: red;
+}
+
+code#err {
+	max-height: 5.5ch;
+	overflow-y: auto;
+	scrollbar-width: initial;
+	color: white;
+	display: block;
+}
+pre.errored code#err {
+	color: red;
+}
