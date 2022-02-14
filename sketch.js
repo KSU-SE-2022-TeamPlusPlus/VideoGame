@@ -66,6 +66,16 @@ function setup() {
 // and drawing instructions -- leading to cleaner code.
 function update() {
 	let dt = deltaTime / 1000; // convert deltaTime from milliseconds
+	
+	// high `deltaTime`s are annoying. i added a `console.log` that prints
+	// every time `deltaTime >` half a second with the `deltaTime` and..
+	// whenever i switch away from the tab, the browser throttles this script,
+	// resulting in deltaTimes ranging from half a second to 4 seconds. this is
+	// annoying because deltaTime should be close to your screen's refresh rate.
+	// i have fixed issues caused by this with the following line:
+	dt = Math.min(dt, 1/30);
+	// the worst possible step the game can take forward is a 30th of a second.
+	
 	time += dt; // to seconds, for use in time
 	
 	// Wrap background
@@ -104,7 +114,6 @@ function update() {
 function draw() {
 	update();
 	
-	// TODO: a seam appears in the wrapping background
 	background(0);
 	
 	// Wrapping background
