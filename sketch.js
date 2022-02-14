@@ -24,6 +24,7 @@ const BALL_SIZE = new p5.Vector(64, 64);
 
 var controls;
 var position = new p5.Vector(0, 0, 0);
+var jumping = false;
 
 var backgroundSpeed = 3; // how fast background moves
 
