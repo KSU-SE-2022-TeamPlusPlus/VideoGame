@@ -1,5 +1,8 @@
 /// <reference path="p5_definitions/p5.global-mode.d.ts" />
 
+// TODO: module system
+// import Timer from "timer.js";
+
 // Scrolling background with basketball
 // Team++
 
@@ -13,9 +16,8 @@ let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 
 // Animation
-const RUNNER_WAIT_INT = 1/12; // Every 12th of a second, switch to next frame.
 let runnerFrame = 0;
-let runnerWait = RUNNER_WAIT_INT;
+let runnerWalkTimer = new Timer(1/12);
 
 var backgroundX = 0;
 
@@ -72,14 +74,10 @@ function update() {
 	
 	// Runner Animation
 	// If enough time has passed...
-	if (runnerWait <= 0) {
+	runnerWalkTimer.step(dt);
+	if (runnerWalkTimer.isTicked()) {
 		// switch the runner's frame to the next one,
 		runnerFrame = (runnerFrame + 1) % gfxRunner.length;
-		// and reset the timer.
-		runnerWait = (runnerWait % RUNNER_WAIT_INT) + RUNNER_WAIT_INT;
-	} else {
-		// Otherwise, tick down the timer.
-		runnerWait -= dt;
 	}
 	
 	// Controls
