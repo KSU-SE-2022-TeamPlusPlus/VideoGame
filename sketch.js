@@ -22,6 +22,7 @@ var x2;
 var left, right, up, down;
 var x = 100;
 var y = 100;
+var delayIt = 0; //control speed of runner
 
 var scrollSpeed = 3; //how fast background moves
 
@@ -33,8 +34,11 @@ function preload() {
 	gfxBall = loadImage("assets/basketball.png");
 	
 	gfxRunner = [];
-	for (let i = 0; i < 15; i++) {
-		gfxRunner.push(loadImage(`assets/runner${i}.png`));
+	//for (let i = 0; i < 15; i++) {
+	//	gfxRunner.push(loadImage(`assets/runner${i}.png`));
+	//}
+	for (let i=1; i<8;i++){
+		gfxRunner.push(loadImage(`assets/t${i}.png`));
 	}
 }
 
@@ -84,7 +88,13 @@ function draw() {
 	image(gfxBackground, x2, 0, width, height);
 	
 	// Runner animation and drawing
-	runnerFrame = (runnerFrame + 1) % gfxRunner.length;
+
+	if (delayIt >= 5){ //delay runner speed
+		runnerFrame++;
+		delayIt = 0; //reset for next image
+	}
+	delayIt++; //delay runner animation to slow down
+	runnerFrame = (runnerFrame) % gfxRunner.length;
 	image(gfxRunner[runnerFrame], 15, 205, 130, 130);
 	
 	// Ball animation and drawing
