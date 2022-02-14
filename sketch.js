@@ -131,6 +131,7 @@ window.draw = function() {
 }
 
 window.keyPressed = function() {
+	if (!controls) return;
 	for (let control of Object.values(controls)) {
 		if (keyCode === control.binding)
 			control.on = true;
@@ -138,6 +139,7 @@ window.keyPressed = function() {
 }
 
 window.keyReleased = function() {
+	if (!controls) return;
 	for (let control of Object.values(controls)) {
 		if (keyCode === control.binding)
 			control.on = false;
