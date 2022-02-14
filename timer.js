@@ -1,4 +1,4 @@
-/*export */class Timer {
+export class Timer {
 	// Makes a new timer that ticks every `intervalSeconds`
 	constructor(intervalSeconds = 0.5) {
 		this.timeRemaining = intervalSeconds;

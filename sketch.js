@@ -1,7 +1,6 @@
 /// <reference path="p5_definitions/p5.global-mode.d.ts" />
 
-// TODO: module system
-// import Timer from "timer.js";
+import { Timer } from "./timer.js";
 
 // Scrolling background with basketball
 // Team++
@@ -28,7 +27,7 @@ var position = new p5.Vector(0, 0, 0);
 
 var backgroundSpeed = 3; // how fast background moves
 
-function preload() {
+window.preload = function() {
 	// Load graphics
 	
 	gfxBackground = loadImage("assets/backgroundsky.png");
@@ -41,7 +40,7 @@ function preload() {
 	}
 }
 
-function setup() {
+window.setup = function() {
 	// Canvas size in pixels
 	createCanvas(CANVAS_SIZE.x, CANVAS_SIZE.y);
 	
@@ -53,7 +52,7 @@ function setup() {
 		left:  { binding: LEFT_ARROW,  },
 		right: { binding: RIGHT_ARROW, },
 	};
-	for (let control in Object.values(controls)) {
+	for (let control of Object.values(controls)) {
 		control.on = false;
 	}
 	
@@ -111,7 +110,7 @@ function update() {
 	}
 }
 
-function draw() {
+window.draw = function() {
 	update();
 	
 	background(0);
@@ -131,14 +130,14 @@ function draw() {
 	pop(); // Restore previous transform context
 }
 
-function keyPressed() {
+window.keyPressed = function() {
 	for (let control of Object.values(controls)) {
 		if (keyCode === control.binding)
 			control.on = true;
 	}
 }
 
-function keyReleased() {
+window.keyReleased = function() {
 	for (let control of Object.values(controls)) {
 		if (keyCode === control.binding)
 			control.on = false;
