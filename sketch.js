@@ -13,6 +13,8 @@ const CANVAS_SIZE = new p5.Vector(800, 400);
 let gfxBall;
 let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
+let gfxWall;
+let gfxChair;
 
 // Animation
 let runnerFrame = 0;
