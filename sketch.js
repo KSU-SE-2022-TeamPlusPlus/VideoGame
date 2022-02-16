@@ -34,6 +34,10 @@ window.preload = function() {
 	gfxBackground = loadImage("assets/backgroundsky.png");
 	
 	gfxBall = loadImage("assets/basketball.png");
+
+	gfxWall = loadImage("assets/wall.png");
+
+	gfxChair = loadImage("assets/chair.png");
 	
 	gfxRunner = [];
 	for (let i = 0; i < 7; i++) {
