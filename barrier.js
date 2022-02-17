@@ -2,16 +2,20 @@
 // It will allow to move() and draw() and have collision() detection
 export class Barrier{
     constructor(x,y){
-        this.xVal = x; //initial values 0 for coordinates
-        this.yVal = y;
+        this.x = x; //initial values 0 for coordinates
+        this.y = y;
     }
-    get x() { return this.xVal; } //getter
-    get y() { return this.yVal; }
+    get xVal() { return this.x; } //getter
+    get yVal() { return this.y; }
 
-    set x(x){ this.xVal = x; } //setter
-    set y(y){ this.yVal = y; }
+    set xVal(x){ this.x = x; } //setter
+    set yVal(y){ this.y = y; }
 
     move(speed){    //moves the x position by the current speed of background movement
-        this.xVal=this.xVal-speed;
+        this.x=this.x-speed;
+        if (this.x<-200){
+            this.x=random(850,1600);
+        }
     }
+
 };

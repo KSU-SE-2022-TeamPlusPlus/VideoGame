@@ -31,7 +31,7 @@ var jumping = false;
 
 var backgroundSpeed = 3; // how fast background moves
 
-//let wallObj = new Barrier(300,350); //not working, max call stack error
+let wallObj = new Barrier(900,180); //sets up initial wall off screen, so it can scroll onto screen from right side
 
 window.preload = function() {
 	// Load graphics
@@ -43,7 +43,8 @@ window.preload = function() {
 	gfxWall = loadImage("assets/wall.png");
 
 	gfxChair = loadImage("assets/chair.png");
-	
+
+		
 	gfxRunner = [];
 	for (let i = 0; i < 7; i++) {
 		gfxRunner.push(loadImage(`assets/runner${i}.png`));
@@ -138,6 +139,10 @@ window.draw = function() {
 	rotate(time * TAU); // = 1 revolution per second
 	image(gfxBall, -BALL_SIZE.x / 2, -BALL_SIZE.y / 2, BALL_SIZE.x, BALL_SIZE.y);
 	pop(); // Restore previous transform context
+
+	//Create wall barrier
+	image(gfxWall,wallObj.xVal,wallObj.yVal,200,200); //prints wall
+	wallObj.move(backgroundSpeed); //move wall with background
 }
 
 window.keyPressed = function() {
