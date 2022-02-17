@@ -1,6 +1,7 @@
 /// <reference path="p5_definitions/p5.global-mode.d.ts" />
 
 import { Timer } from "./timer.js";
+import { Barrier } from "./barrier.js";
 
 // Scrolling background with basketball
 // Team++
@@ -29,6 +30,8 @@ var position = new p5.Vector(0, 0, 0);
 var jumping = false;
 
 var backgroundSpeed = 3; // how fast background moves
+
+//let wallObj = new Barrier(300,350); //not working, max call stack error
 
 window.preload = function() {
 	// Load graphics
