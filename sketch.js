@@ -16,6 +16,7 @@ let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 let gfxWall;
 let gfxChair;
+let falling = false;
 
 // Animation
 let runnerFrame = 0;
@@ -31,7 +32,7 @@ var jumping = false;
 
 var backgroundSpeed = 3; // how fast background moves
 
-let wallObj = new Barrier(900,180); //sets up initial wall off screen, so it can scroll onto screen from right side
+let wallObj = new Barrier(900,210); //sets up initial wall off screen, so it can scroll onto screen from right side
 
 window.preload = function() {
 	// Load graphics
@@ -107,18 +108,36 @@ function update() {
 			control.on = false;
 		}
 	}
-	
-	if (controls.left.on) position.x -= 1;
-	if (controls.right.on) position.x += 1;
-	
-	if (controls.up.on) {
-		jumping = true;
-		position.y -= 1;
+	if (position.y<-158) falling=true;  //once reached the top of the jump, start falling
+	if (falling){
+		position.y +=2;
+		if (position.y>=0) falling=false;  //once reached ground level, stop falling
 	}
-	if (controls.down.on) {
-		jumping = false;
-		position.y += 1;
+	
+
+	if (!falling){ //while the ball is not falling, allow controls to function
+
+		if (jumping){ //once up pressed, make sure complete jump goes through, block key access
+			position.y -=4;
+			if (position.y<=-155){ //once top of jump reached
+				jumping = false;
+				falling = true;
+			}
+		}
+		else{
+			if (controls.left.on) position.x -= 1;
+			if (controls.right.on) position.x += 1;
+			
+			if (controls.up.on) {
+				jumping = true;
+				position.y -= 1;
+			}
+			if (controls.down.on) {
+				jumping = false;
+				position.y += 1;
+			}	
 	}
+}
 }
 
 window.draw = function() {
@@ -140,6 +159,7 @@ window.draw = function() {
 	image(gfxBall, -BALL_SIZE.x / 2, -BALL_SIZE.y / 2, BALL_SIZE.x, BALL_SIZE.y);
 	pop(); // Restore previous transform context
 
+	
 	//Create wall barrier
 	image(gfxWall,wallObj.xVal,wallObj.yVal,200,200); //prints wall
 	wallObj.move(backgroundSpeed); //move wall with background
