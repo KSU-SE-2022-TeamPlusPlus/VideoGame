@@ -1,4 +1,4 @@
-/// <reference path="p5_definitions/p5.global-mode.d.ts" />
+/// <reference path="../p5_definitions/p5.global-mode.d.ts" />
 
 // Utility
 import { Timer } from "./timer.js";
