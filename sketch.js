@@ -16,7 +16,6 @@ let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 let gfxWall;
 let gfxChair;
-let falling = false;
 
 // Animation
 let runnerFrame = 0;
@@ -24,44 +23,48 @@ let runnerWalkTimer = new Timer(1/12);
 
 var backgroundX = 0;
 
+let obstacleTimer = new Timer(1);
+let obstacles = [];
+
 const BALL_SIZE = new p5.Vector(64, 64);
 
 var controls;
 var position = new p5.Vector(0, 0, 0);
-var jumping = false;
+var velocity = new p5.Vector(0, 0);
+var grounded = true;
+const GRAVITY = new p5.Vector(0, 4.0);
 
 var backgroundSpeed = 3; // how fast background moves
 
-let wallObj = new Barrier(900,210); //sets up initial wall off screen, so it can scroll onto screen from right side
+let wallObj = new Barrier(900, 210); //sets up initial wall off screen, so it can scroll onto screen from right side
 
-window.preload = function() {
+window.preload = function () {
 	// Load graphics
 	
 	gfxBackground = loadImage("assets/backgroundsky.png");
 	
 	gfxBall = loadImage("assets/basketball.png");
-
+	
 	gfxWall = loadImage("assets/wall.png");
-
+	
 	gfxChair = loadImage("assets/chair.png");
-
-		
+	
 	gfxRunner = [];
 	for (let i = 0; i < 7; i++) {
 		gfxRunner.push(loadImage(`assets/runner${i}.png`));
 	}
 }
 
-window.setup = function() {
+window.setup = function () {
 	// Canvas size in pixels
 	createCanvas(CANVAS_SIZE.x, CANVAS_SIZE.y);
 	
 	time = 0; // Time in seconds
 	
 	controls = {
-		up:    { binding: UP_ARROW,    },
-		down:  { binding: DOWN_ARROW,  },
-		left:  { binding: LEFT_ARROW,  },
+		up: { binding: UP_ARROW, },
+		down: { binding: DOWN_ARROW, },
+		left: { binding: LEFT_ARROW, },
 		right: { binding: RIGHT_ARROW, },
 	};
 	for (let control of Object.values(controls)) {
@@ -71,6 +74,8 @@ window.setup = function() {
 	colorMode(RGB, 1); // Change color format
 	// Colors are now percentages from [0, 1]
 	// instead of numbers from [0, 256)
+	
+	rectMode(CENTER);
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -89,6 +94,39 @@ function update() {
 	
 	time += dt; // to seconds, for use in time
 	
+	// Controls
+	
+	if (!focused) {
+		for (let control of Object.values(controls)) {
+			control.on = false;
+		}
+	}
+	
+	if (grounded) {
+		if (controls.up.on) {
+			velocity.y = -4;
+			grounded = false;
+		}
+	}
+	
+	// Physics
+	
+	if (!grounded) {
+		// what's the point of having a built-in vector class
+		// if you don't support scalar AND vector operations?
+		
+		position.y += velocity.y;
+		velocity.y += GRAVITY.y * dt;
+		
+		if (position.y > 0) {
+			position.y = 0;
+			velocity.y = 0;
+			grounded = true;
+		}
+	}
+	
+	// Animations
+	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
 	if (backgroundX < -width) backgroundX = backgroundX % width;
@@ -97,52 +135,15 @@ function update() {
 	// If enough time has passed...
 	runnerWalkTimer.step(dt);
 	if (runnerWalkTimer.isTicked()) {
-		// switch the runner's frame to the next one,
+		// ...switch the runner's frame to the next one,
 		runnerFrame = (runnerFrame + 1) % gfxRunner.length;
 	}
-	
-	// Controls
-	
-	if (!focused) {
-		for (let control of Object.values(controls)) {
-			control.on = false;
-		}
-	}
-	if (position.y<-158) falling=true;  //once reached the top of the jump, start falling
-	if (falling){
-		position.y +=2;
-		if (position.y>=0) falling=false;  //once reached ground level, stop falling
-	}
-	
-
-	if (!falling){ //while the ball is not falling, allow controls to function
-
-		if (jumping){ //once up pressed, make sure complete jump goes through, block key access
-			position.y -=4;
-			if (position.y<=-155){ //once top of jump reached
-				jumping = false;
-				falling = true;
-			}
-		}
-		else{
-			if (controls.left.on) position.x -= 1;
-			if (controls.right.on) position.x += 1;
-			
-			if (controls.up.on) {
-				jumping = true;
-				position.y -= 1;
-			}
-			if (controls.down.on) {
-				jumping = false;
-				position.y += 1;
-			}	
-	}
-}
 }
 
-window.draw = function() {
+window.draw = function () {
 	update();
 	
+	// Clear screen
 	background(0);
 	
 	// Wrapping background
@@ -155,17 +156,17 @@ window.draw = function() {
 	// Ball animation and drawing
 	push(); // Push new transform context
 	translate(225 + position.x, 333 - BALL_SIZE.y / 2 + position.y);
+	scale(BALL_SIZE);
 	rotate(time * TAU); // = 1 revolution per second
-	image(gfxBall, -BALL_SIZE.x / 2, -BALL_SIZE.y / 2, BALL_SIZE.x, BALL_SIZE.y);
+	image(gfxBall, -0.5, -0.5, 1, 1);
 	pop(); // Restore previous transform context
-
 	
-	//Create wall barrier
-	image(gfxWall,wallObj.xVal,wallObj.yVal,200,200); //prints wall
-	wallObj.move(backgroundSpeed); //move wall with background
+	// Create wall barrier
+	image(gfxWall, wallObj.xVal, wallObj.yVal, 200, 200); // draws wall
+	wallObj.move(backgroundSpeed); // move wall with background
 }
 
-window.keyPressed = function() {
+window.keyPressed = function () {
 	if (!controls) return;
 	for (let control of Object.values(controls)) {
 		if (keyCode === control.binding)
@@ -173,7 +174,7 @@ window.keyPressed = function() {
 	}
 }
 
-window.keyReleased = function() {
+window.keyReleased = function () {
 	if (!controls) return;
 	for (let control of Object.values(controls)) {
 		if (keyCode === control.binding)
@@ -183,7 +184,7 @@ window.keyReleased = function() {
 
 function worldToScreen(v) {
 	return new p5.Vector(
-		v.x + v.z * 0.75,
+		v.x - v.z * 0.75,
 		v.y - v.z * 1
 	);
 }
