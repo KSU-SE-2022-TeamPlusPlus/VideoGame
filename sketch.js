@@ -1,58 +1,44 @@
 /// <reference path="p5_definitions/p5.global-mode.d.ts" />
 
+// Utility
 import { Timer } from "./timer.js";
+
+// Game Objects
+import { Runner } from "./runner.js";
+import { Player } from "./player.js";
 import { Barrier } from "./barrier.js";
 
-// Scrolling background with basketball
+// Runaway Ball, Roll On!! (working title???)
 // Team++
 
+// Environment
+const CANVAS_SIZE = new p5.Vector(800, 400);
 let time = 0;
 
-const CANVAS_SIZE = new p5.Vector(800, 400);
-
 // Graphics
-let gfxBall;
-let gfxRunner = []; // their name is canonically chase
 let gfxBackground;
 let gfxWall;
 let gfxChair;
 
 // Animation
-let runnerFrame = 0;
-let runnerWalkTimer = new Timer(1/12);
-
 var backgroundX = 0;
-
-let obstacleTimer = new Timer(1);
-let obstacles = [];
-
-const BALL_SIZE = new p5.Vector(64, 64);
-
-var controls;
-var position = new p5.Vector(0, 0, 0);
-var velocity = new p5.Vector(0, 0);
-var grounded = true;
-const GRAVITY = new p5.Vector(0, 4.0);
-
 var backgroundSpeed = 3; // how fast background moves
 
-let wallObj = new Barrier(900, 210); //sets up initial wall off screen, so it can scroll onto screen from right side
+var controls;
+
+let player, runner;
+let wallObj = new Barrier(900, 210); // sets up initial wall off screen, so it can scroll onto screen from right side
 
 window.preload = function () {
 	// Load graphics
 	
 	gfxBackground = loadImage("assets/backgroundsky.png");
 	
-	gfxBall = loadImage("assets/basketball.png");
+	Player.preload();
+	Runner.preload();
 	
 	gfxWall = loadImage("assets/wall.png");
-	
 	gfxChair = loadImage("assets/chair.png");
-	
-	gfxRunner = [];
-	for (let i = 0; i < 7; i++) {
-		gfxRunner.push(loadImage(`assets/runner${i}.png`));
-	}
 }
 
 window.setup = function () {
@@ -62,8 +48,7 @@ window.setup = function () {
 	time = 0; // Time in seconds
 	
 	controls = {
-		up: { binding: UP_ARROW, },
-		down: { binding: DOWN_ARROW, },
+		jump: { binding: UP_ARROW, },
 		left: { binding: LEFT_ARROW, },
 		right: { binding: RIGHT_ARROW, },
 	};
@@ -75,7 +60,8 @@ window.setup = function () {
 	// Colors are now percentages from [0, 1]
 	// instead of numbers from [0, 256)
 	
-	rectMode(CENTER);
+	player = new Player();
+	runner = new Runner();
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -102,42 +88,16 @@ function update() {
 		}
 	}
 	
-	if (grounded) {
-		if (controls.up.on) {
-			velocity.y = -4;
-			grounded = false;
-		}
-	}
+	player.control(controls);
 	
-	// Physics
+	// Physics & Animations
 	
-	if (!grounded) {
-		// what's the point of having a built-in vector class
-		// if you don't support scalar AND vector operations?
-		
-		position.y += velocity.y;
-		velocity.y += GRAVITY.y * dt;
-		
-		if (position.y > 0) {
-			position.y = 0;
-			velocity.y = 0;
-			grounded = true;
-		}
-	}
-	
-	// Animations
+	player.update(dt);
+	runner.update(dt);
 	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
 	if (backgroundX < -width) backgroundX = backgroundX % width;
-	
-	// Runner Animation
-	// If enough time has passed...
-	runnerWalkTimer.step(dt);
-	if (runnerWalkTimer.isTicked()) {
-		// ...switch the runner's frame to the next one,
-		runnerFrame = (runnerFrame + 1) % gfxRunner.length;
-	}
 }
 
 window.draw = function () {
@@ -150,16 +110,11 @@ window.draw = function () {
 	image(gfxBackground, Math.round(backgroundX), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
 	
-	// Runner animation and drawing
-	image(gfxRunner[runnerFrame], 15, 205, 130, 130);
+	// Runner
+	runner.draw();
 	
-	// Ball animation and drawing
-	push(); // Push new transform context
-	translate(225 + position.x, 333 - BALL_SIZE.y / 2 + position.y);
-	scale(BALL_SIZE);
-	rotate(time * TAU); // = 1 revolution per second
-	image(gfxBall, -0.5, -0.5, 1, 1);
-	pop(); // Restore previous transform context
+	// Ball
+	player.draw();
 	
 	// Create wall barrier
 	image(gfxWall, wallObj.xVal, wallObj.yVal, 200, 200); // draws wall
