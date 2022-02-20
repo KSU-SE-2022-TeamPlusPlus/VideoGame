@@ -6,8 +6,8 @@ The Video Game, for our project. This README file will be updated weekly dependi
 2. Clone this repository by using `git clone` and pasting the repo link.
 3. Open up the directory where the repo was cloned in your text editor.
 4. Run the `git pull` command to ensure you have the latest version of our code.
-5. Open up a terminal window and navigate to the `scripts` folder of the repository: `VideoGame/scripts`
-6. In the terminal, run the command `python server.py` to start the python server
+5. Open up a terminal window, making sure you are in the project's root directory: `VideoGame/`
+6. In the terminal, run the command `python scripts/server.py` to start the python server.
 7. Navigate to `localhost:8000` on your computer in an internet browser to see what the game currently looks like.
 
 ## Game Information
