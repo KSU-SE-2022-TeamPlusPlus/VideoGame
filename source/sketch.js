@@ -27,7 +27,7 @@ var backgroundSpeed = 3; // how fast background moves
 var controls;
 
 let player, runner;
-let wallObj = new Barrier(900, 210); // sets up initial wall off screen, so it can scroll onto screen from right side
+let wallObj = new Barrier(900, 240); // sets up initial wall off screen, so it can scroll onto screen from right side
 
 window.preload = function () {
 	// Load graphics
@@ -117,7 +117,7 @@ window.draw = function () {
 	player.draw();
 	
 	// Create wall barrier
-	image(gfxWall, wallObj.xVal, wallObj.yVal, 200, 200); // draws wall
+	image(gfxWall, wallObj.xVal, wallObj.yVal, 140,140); // draws wall
 	wallObj.move(backgroundSpeed); // move wall with background
 }
 
