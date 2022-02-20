@@ -32,7 +32,7 @@ let wallObj = new Barrier(900, 240); // sets up initial wall off screen, so it c
 window.preload = function () {
 	// Load graphics
 	
-	gfxBackground = loadImage("assets/backgroundsky.png");
+	gfxBackground = loadImage("assets/backyard pixel 2.png");
 	
 	Player.preload();
 	Runner.preload();
