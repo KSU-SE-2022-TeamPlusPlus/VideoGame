@@ -122,26 +122,26 @@ window.draw = function () {
 	//will need to get compared to the new one, and if too close, it gets re-drawn.
 	
 	// Create wall barrier
-	image(gfxWall, wallObj.xVal, wallObj.yVal, 140,140); // draws wall
+	image(gfxWall, wallObj.xVal, wallObj.yVal, 140, 140); // draws wall
 	wallObj.move(backgroundSpeed); // move wall with background
-
-	if (wallObj.x <-200){ 			//if it goes off screen
-		wallObj.x = random(850,2000);
-		while (((wallObj.x-chairObj.x)<400) || ((chairObj.x-wallObj.x)>-400)) { //if too close to other object
-			wallObj.x = random(850,2000);
+	
+	if (wallObj.x < -200) { // if it goes off screen
+		wallObj.x = random(850, 2000);
+		while (((wallObj.x - chairObj.x) < 400) || ((chairObj.x - wallObj.x) > -400)) { // if too close to other object
+			wallObj.x = random(850, 2000);
 		}
 	}
-	//Create chair barrier
-	image(gfxChair, chairObj.xVal, chairObj.yVal, 100,100); // draws wall
+	
+	// Create chair barrier
+	image(gfxChair, chairObj.xVal, chairObj.yVal, 100, 100); // draws wall
 	chairObj.move(backgroundSpeed); // move wall with background
-
-	if (chairObj.x <-200){			//if it goes off screen
-		chairObj.x = random(850,2000);
-		while (((chairObj.x-wallObj.x)<400) || ((wallObj.x-chairObj.x)>-400)){ //if too close to other object
-			chairObj.x = random(850,2000);
+	
+	if (chairObj.x < -200) { // if it goes off screen
+		chairObj.x = random(850, 2000);
+		while (((chairObj.x - wallObj.x) < 400) || ((wallObj.x - chairObj.x) > -400)) { // if too close to other object
+			chairObj.x = random(850, 2000);
 		}
 	}
-
 }
 
 window.keyPressed = function () {

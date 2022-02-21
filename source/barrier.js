@@ -16,8 +16,8 @@ export class Barrier {
 	
 	move(speed) { //moves the x position by the current speed of background movement
 		this.x = this.x - speed;
-		//if (this.x < -200) { 				//once the barrier has already moved off screen 
-	//		this.x = random(850, 1600);		//put a new barrier at a random location off screen
-		//}
+		// if (this.x < -200) {         // once the barrier has already moved off screen 
+		// 	this.x = random(850, 1600); // put a new barrier at a random location off screen
+		// }
 	}
 };
