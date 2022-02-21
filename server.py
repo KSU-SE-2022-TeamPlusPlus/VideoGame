@@ -1,3 +1,19 @@
+#!/usr/bin/env python
+
+import sys
+
+# https://stackoverflow.com/a/48056064/
+if sys.hexversion < 0x030600f0:
+	version_str = f"{sys.version_info.major}.{sys.version_info.minor}"
+	exit(f"""
+You are using Python {version_str}.
+This script only works on Python 3.6 and up.
+You may need to install a newer version of Python.
+
+Python isn't required beyond this script, so if you have an alternative method
+of running a local server that has the proper MIME types and such, you can
+abandon Python entirely.""")
+
 import http.server
 import socketserver
 
