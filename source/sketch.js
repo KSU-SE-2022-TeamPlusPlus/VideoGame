@@ -28,6 +28,7 @@ var controls;
 
 let player, runner;
 let wallObj = new Barrier(900, 240); // sets up initial wall off screen, so it can scroll onto screen from right side
+let chairObj = new Barrier(1200,240);
 
 window.preload = function () {
 	// Load graphics
@@ -116,9 +117,31 @@ window.draw = function () {
 	// Ball
 	player.draw();
 	
+	//The following works for each object by comparing its location as it is being re-drawn to the
+	//other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
+	//will need to get compared to the new one, and if too close, it gets re-drawn.
+	
 	// Create wall barrier
 	image(gfxWall, wallObj.xVal, wallObj.yVal, 140,140); // draws wall
 	wallObj.move(backgroundSpeed); // move wall with background
+
+	if (wallObj.x <-200){ 			//if it goes off screen
+		wallObj.x = random(850,2000);
+		while (((wallObj.x-chairObj.x)<400) || ((chairObj.x-wallObj.x)>-400)) { //if too close to other object
+			wallObj.x = random(850,2000);
+		}
+	}
+	//Create chair barrier
+	image(gfxChair, chairObj.xVal, chairObj.yVal, 100,100); // draws wall
+	chairObj.move(backgroundSpeed); // move wall with background
+
+	if (chairObj.x <-200){			//if it goes off screen
+		chairObj.x = random(850,2000);
+		while (((chairObj.x-wallObj.x)<400) || ((wallObj.x-chairObj.x)>-400)){ //if too close to other object
+			chairObj.x = random(850,2000);
+		}
+	}
+
 }
 
 window.keyPressed = function () {
