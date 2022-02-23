@@ -2,7 +2,8 @@
 The Video Game, for our project. This README file will be updated weekly depending on changes we have made or new ideas that we decide to used in our weekly Standup meetings.
 
 ## Download and Running Instructions
-1. Ensure that the latest installation of Python 3 is installed, as well as a text editor and Git.
+1. Ensure that the latest installation of [Python](https://www.python.org/downloads/) 3 is installed, as well as a text editor and [Git](https://git-scm.com/downloads).
+	- You can check your version of Python with `python --version`. If this prints "Python 2.x", you're using the wrong version -- but you may still have Python 3 installed: if `python3 --version` also works, you can substitute `python` for `python3` in later commands.
 2. Clone this repository by using `git clone` and pasting the repo link.
 3. Open up the directory where the repo was cloned in your text editor.
 4. Run the `git pull` command to ensure you have the latest version of our code.
