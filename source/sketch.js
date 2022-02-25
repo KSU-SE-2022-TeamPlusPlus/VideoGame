@@ -19,6 +19,8 @@ let time = 0;
 let gfxBackground;
 let gfxWall;
 let gfxChair;
+var greenJumper = []; //create array for jumping enemy image
+var jumperFrame = 0;
 
 // Animation
 var backgroundX = 0;
@@ -40,6 +42,11 @@ window.preload = function () {
 	
 	gfxWall = loadImage("assets/wall.png");
 	gfxChair = loadImage("assets/chair.png");
+
+	//put all the jumping enemy sprites into greenJumper variable
+	for (let i = 0; i < 5; i++) {
+		greenJumper[i] = (loadImage(`assets/gr${i}.png`));
+	}
 }
 
 window.setup = function () {
@@ -142,6 +149,9 @@ window.draw = function () {
 			chairObj.x = random(850, 2000);
 		}
 	}
+
+	image(greenJumper[jumperFrame],chairObj.xVal+130,chairObj.yVal+60, 40,40);
+
 }
 
 window.keyPressed = function () {
