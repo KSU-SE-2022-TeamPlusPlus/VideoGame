@@ -150,7 +150,7 @@ window.draw = function () {
 		}
 	}
 
-	image(greenJumper[jumperFrame],chairObj.xVal+130,chairObj.yVal+60, 40,40);
+	image(greenJumper[jumperFrame],chairObj.xVal+130,chairObj.yVal+60, 40,40); //needs movement added, testing stage
 
 }
 
