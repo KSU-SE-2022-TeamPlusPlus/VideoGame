@@ -157,8 +157,8 @@ window.draw = function () {
 	player.draw();
 	
 	// Barriers
-	//objWall.draw();
-	//objChair.draw();
+	objWall.draw();
+	objChair.draw();
 	
 	// needs movement added, testing stage
 	image(
