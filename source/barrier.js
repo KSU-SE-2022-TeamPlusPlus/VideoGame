@@ -25,7 +25,7 @@ export class Barrier {
 		}
 	}
 	
-	constructor(variant = "wall", startPos) {
+	constructor(variant = "brickwall", startPos) {
 		const VARIANT_V = Barrier.VARIANTS[variant];
 		
 		this.position = startPos || new p5.Vector();
