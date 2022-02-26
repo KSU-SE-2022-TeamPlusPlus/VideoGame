@@ -32,7 +32,7 @@ let objWall, objChair;
 window.preload = function () {
 	// Load graphics
 	
-	gfxBackground = loadImage("assets/backyard2.png");
+	gfxBackground = loadImage("assets/backyard pixel path.png");
 	
 	// Preload player / runner graphics
 	Player.preload();
