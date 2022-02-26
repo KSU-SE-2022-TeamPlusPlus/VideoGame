@@ -31,16 +31,16 @@ let objWall, objChair;
 
 window.preload = function () {
 	// Load graphics
-	
+
 	gfxBackground = loadImage("assets/backyard pixel path.png");
-	
+
 	// Preload player / runner graphics
 	Player.preload();
 	Runner.preload();
 	
 	// Preload all barriers (see VARIANTS in Barrier for which files)
 	Barrier.preload();
-
+	
 	//put all the jumping enemy sprites into greenJumper variable
 	for (let i = 0; i < 5; i++) {
 		greenJumper[i] = (loadImage(`assets/gr${i}.png`));
@@ -72,8 +72,8 @@ window.setup = function () {
 	runner = new Runner();
 	
 	// Make two barriers
-	objWall = new Barrier("brickwall", createVector(900, 240));
-	objChair = new Barrier("lawnchair", createVector(1200, 240));
+	objWall = new Barrier("wall", createVector(900, 240));
+	objChair = new Barrier("chair", createVector(1200, 240));
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -133,7 +133,7 @@ function update() {
 		) { // if too close to other object
 			objChair.position.x = random(850, 2000);
 		}
-	} 
+	}
 	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
