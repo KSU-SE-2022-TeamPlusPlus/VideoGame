@@ -17,8 +17,6 @@ let time = 0;
 
 // Graphics
 let gfxBackground;
-let gfxWall;
-let gfxChair;
 var greenJumper = []; //create array for jumping enemy image
 var jumperFrame = 0;
 
@@ -29,19 +27,19 @@ var backgroundSpeed = 3; // how fast background moves
 var controls;
 
 let player, runner;
-let wallObj = new Barrier(900, 240); // sets up initial wall off screen, so it can scroll onto screen from right side
-let chairObj = new Barrier(1200,240);
+let objWall, objChair;
 
 window.preload = function () {
 	// Load graphics
 	
 	gfxBackground = loadImage("assets/backyard pixel 2.png");
 	
+	// Preload player / runner graphics
 	Player.preload();
 	Runner.preload();
 	
-	gfxWall = loadImage("assets/wall.png");
-	gfxChair = loadImage("assets/chair.png");
+	// Preload all barriers (see VARIANTS in Barrier for which files)
+	Barrier.preload();
 
 	//put all the jumping enemy sprites into greenJumper variable
 	for (let i = 0; i < 5; i++) {
@@ -69,8 +67,13 @@ window.setup = function () {
 	// Colors are now percentages from [0, 1]
 	// instead of numbers from [0, 256)
 	
+	// Make the player / runner
 	player = new Player();
 	runner = new Runner();
+	
+	// Make two barriers
+	objWall = new Barrier("wall", createVector(900, 240));
+	objChair = new Barrier("chair", createVector(1200, 240));
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -104,6 +107,34 @@ function update() {
 	player.update(dt);
 	runner.update(dt);
 	
+	objWall.move(backgroundSpeed); // move obstacle with background
+	objChair.move(backgroundSpeed); // move obstacle with background
+	
+	// The following works for each object by comparing its location to the
+	// other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
+	// will need to get compared to the new one, and if too close, it gets re-positioned.
+	
+	// Reposition objects if they overlap eachother.
+	// TODO: This should be an "obstacle manager"'s job.
+	if (objWall.position.x < -200) { // if it goes off screen
+		objWall.position.x = random(850, 2000);
+		while (
+			/**/((objWall.position.x - objChair.position.x) < 400)
+			||  ((objChair.position.x - objWall.position.x) > -400)
+		) { // if too close to other object
+			objWall.position.x = random(850, 2000);
+		}
+	}
+	if (objChair.position.x < -200) { // if it goes off screen
+		objChair.position.x = random(850, 2000);
+		while (
+			/**/((objChair.position.x - objWall.position.x) < 400)
+			||  ((objWall.position.x - objChair.position.x) > -400)
+		) { // if too close to other object
+			objChair.position.x = random(850, 2000);
+		}
+	}
+	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
 	if (backgroundX < -width) backgroundX = backgroundX % width;
@@ -125,34 +156,17 @@ window.draw = function () {
 	// Ball
 	player.draw();
 	
-	//The following works for each object by comparing its location as it is being re-drawn to the
-	//other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
-	//will need to get compared to the new one, and if too close, it gets re-drawn.
+	// Barriers
+	objWall.draw();
+	objChair.draw();
 	
-	// Create wall barrier
-	image(gfxWall, wallObj.xVal, wallObj.yVal, 140, 140); // draws wall
-	wallObj.move(backgroundSpeed); // move wall with background
-	
-	if (wallObj.x < -200) { // if it goes off screen
-		wallObj.x = random(850, 2000);
-		while (((wallObj.x - chairObj.x) < 400) || ((chairObj.x - wallObj.x) > -400)) { // if too close to other object
-			wallObj.x = random(850, 2000);
-		}
-	}
-	
-	// Create chair barrier
-	image(gfxChair, chairObj.xVal, chairObj.yVal, 100, 100); // draws wall
-	chairObj.move(backgroundSpeed); // move wall with background
-	
-	if (chairObj.x < -200) { // if it goes off screen
-		chairObj.x = random(850, 2000);
-		while (((chairObj.x - wallObj.x) < 400) || ((wallObj.x - chairObj.x) > -400)) { // if too close to other object
-			chairObj.x = random(850, 2000);
-		}
-	}
-
-	image(greenJumper[jumperFrame],chairObj.xVal+130,chairObj.yVal+60, 40,40); //needs movement added, testing stage
-
+	// needs movement added, testing stage
+	image(
+		greenJumper[jumperFrame],
+		objChair.position.x + 130,
+		objChair.position.y + 60,
+		40, 40
+	);
 }
 
 window.keyPressed = function () {
