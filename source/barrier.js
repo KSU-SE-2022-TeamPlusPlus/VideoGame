@@ -5,11 +5,11 @@
 export class Barrier {
 	static VARIANTS = {
 		wall: {
-			image: "assets/wall.png",
+			image: "assets/brickwall.png",
 			size: new p5.Vector(140, 140),
 		},
 		chair: {
-			image: "assets/chair.png",
+			image: "assets/lawnchair.png",
 			size: new p5.Vector(100, 100),
 		},
 	};
