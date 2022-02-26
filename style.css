@@ -26,7 +26,12 @@ main {
 	overflow: hidden;
 }
 main > canvas {
+	margin: -1px;
+	border: solid 1px transparent;
 	display: block;
+}
+main > canvas:focus {
+	border-color: white;
 }
 
 pre {

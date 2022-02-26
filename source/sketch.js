@@ -51,7 +51,8 @@ window.preload = function () {
 
 window.setup = function () {
 	// Canvas size in pixels
-	createCanvas(CANVAS_SIZE.x, CANVAS_SIZE.y);
+	let c = createCanvas(CANVAS_SIZE.x, CANVAS_SIZE.y).elt;
+	c.tabIndex = -1; // make canvas focusable
 	
 	time = 0; // Time in seconds
 	
