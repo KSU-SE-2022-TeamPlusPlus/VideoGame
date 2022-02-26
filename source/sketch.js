@@ -72,8 +72,8 @@ window.setup = function () {
 	runner = new Runner();
 	
 	// Make two barriers
-	objWall = new Barrier("wall", createVector(900, 240));
-	objChair = new Barrier("chair", createVector(1200, 240));
+	objWall = new Barrier("brickwall", createVector(900, 240));
+	objChair = new Barrier("lawnchair", createVector(1200, 240));
 }
 
 // This isn't necessarily required, but it does help separate state changes
