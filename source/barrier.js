@@ -4,12 +4,21 @@
 // once the current barrier has moved off screen
 export class Barrier {
 	static VARIANTS = {
+<<<<<<< HEAD
 		brickwall: {
 			image: "assets/brickwall.png",
 			size: new p5.Vector(140, 140),
 		},
 		lawnchair: {
 			image: "assets/lawnchair.png",
+=======
+		wall: {
+			image: "assets/wall.png",
+			size: new p5.Vector(140, 140),
+		},
+		chair: {
+			image: "assets/chair.png",
+>>>>>>> parent of 6e86b74 (Update barrier.js)
 			size: new p5.Vector(100, 100),
 		},
 	};
