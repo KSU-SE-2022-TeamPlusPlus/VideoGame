@@ -27,7 +27,7 @@ var backgroundSpeed = 3; // how fast background moves
 var controls;
 
 let player, runner;
-let objWall, objChair, objStump;
+let objWall, objChair;
 
 window.preload = function () {
 	// Load graphics
@@ -74,7 +74,6 @@ window.setup = function () {
 	// Make three barriers
 	objWall = new Barrier("brickwall", createVector(900, 240));
 	objChair = new Barrier("lawnchair", createVector(1200, 240));
-	objStump = new Barrier("treestump", createVector(240, 240));
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -110,7 +109,6 @@ function update() {
 	
 	objWall.move(backgroundSpeed); // move obstacle with background
 	objChair.move(backgroundSpeed); // move obstacle with background
-	objStump.move(backgroundSpeed); // move obstacle with background
 	
 	// The following works for each object by comparing its location to the
 	// other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
@@ -123,8 +121,6 @@ function update() {
 		while (
 			/**/((objWall.position.x - objChair.position.x) < 400)
 			||  ((objChair.position.x - objWall.position.x) > -400)
-			||  ((objStump.position.x - objWall.position.x) > -400)
-			||  ((objWall.position.x - objStump.position.x) > -400)
 		) { // if too close to other object
 			objWall.position.x = random(850, 2000);
 		}
@@ -134,23 +130,10 @@ function update() {
 		while (
 			/**/((objChair.position.x - objWall.position.x) < 400)
 			||  ((objWall.position.x - objChair.position.x) > -400)
-			||  ((objStump.position.x - objChair.position.x) > -400)
-			||  ((objChair.position.x - objStump.position.x) > -400)
 		) { // if too close to other object
 			objChair.position.x = random(850, 2000);
 		}
-	} //Added more options for stump obstacle
-	if (objStump.position.x < -200) { // if it goes off screen
-		objStump.position.x = random(850, 2000);
-		while (
-			/**/((objStump.position.x - objWall.position.x) < 400)
-			||  ((objWall.position.x - objStump.position.x) > -400)
-			||  ((objStump.position.x - objChair.position.x) > -400)
-			||  ((objChair.position.x - objStump.position.x) > -400)
-		) { // if too close to other object
-			objWall.position.x = random(850, 2000);
-		}
-	}
+	} 
 	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
@@ -176,7 +159,6 @@ window.draw = function () {
 	// Barriers
 	objWall.draw();
 	objChair.draw();
-	objStump.draw();
 	
 	// needs movement added, testing stage
 	image(
