@@ -4,15 +4,15 @@
 // once the current barrier has moved off screen
 export class Barrier {
 	static VARIANTS = {
-		wall: {
+		brickwall: {
 			image: "assets/brickwall.png",
 			size: new p5.Vector(140, 140),
 		},
-		chair: {
+		lawnchair: {
 			image: "assets/lawnchair.png",
 			size: new p5.Vector(100, 100),
 		},
-		stump: {
+		treestump: {
 			image: "assets/treestump.png",
 			size: new p5.Vector(100, 100),
 		},
@@ -29,7 +29,7 @@ export class Barrier {
 		}
 	}
 	
-	constructor(variant = "wall", startPos) {
+	constructor(variant = "brickwall", startPos) {
 		const VARIANT_V = Barrier.VARIANTS[variant];
 		
 		this.position = startPos || new p5.Vector();
