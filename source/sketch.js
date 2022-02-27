@@ -17,7 +17,6 @@ let time = 0;
 
 // Graphics
 let gfxBackground;
-let jumperGIF;
 
 // Animation
 var backgroundX = 0;
@@ -26,7 +25,7 @@ var backgroundSpeed = 3; // how fast background moves
 var controls;
 
 let player, runner;
-let objWall, objChair, objJumper;
+let objWall, objChair, objJumper, objStump;
 
 window.preload = function () {
 	// Load graphics
@@ -69,6 +68,7 @@ window.setup = function () {
 	objWall = new Barrier("brickwall", createVector(900, 240));
 	objChair = new Barrier("lawnchair", createVector(1200, 240));
 	objJumper = new Barrier("jumpEnemy", createVector(1400,230));
+	objStump = new Barrier("treeStump", createVector(1400,345));
 
 }
 
@@ -106,6 +106,7 @@ function update() {
 	objWall.move(backgroundSpeed); // move obstacle with background
 	objChair.move(backgroundSpeed); // move obstacle with background
 	objJumper.move(backgroundSpeed);
+	objStump.move(backgroundSpeed);
 	
 	// The following works for each object by comparing its location to the
 	// other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
@@ -140,6 +141,10 @@ function update() {
 			objJumper.position.x = random(850, 2000);
 		}	
 	}
+
+	if (objStump.position.x < -200) { // if it goes off screen
+		objStump.position.x = random(2050, 3000);
+	}
 	
 	
 	// Wrap background
@@ -167,6 +172,7 @@ window.draw = function () {
 	// Barriers
 	objWall.draw();
 	objChair.draw();
+	objStump.draw();
 	
 	
 }

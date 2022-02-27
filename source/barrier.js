@@ -16,6 +16,10 @@ export class Barrier {
 			image: "assets/jumper.gif",
 			size: new p5.Vector(40, 40),
 		},
+		treeStump: {
+			image: "assets/treestump.png",
+			size: new p5.Vector(50, 50),
+		},
 	};
 	
 	static preload() {
