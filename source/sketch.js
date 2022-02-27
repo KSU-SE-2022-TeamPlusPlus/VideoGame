@@ -17,8 +17,7 @@ let time = 0;
 
 // Graphics
 let gfxBackground;
-var greenJumper = []; //create array for jumping enemy image
-var jumperFrame = 0;
+let jumperGIF;
 
 // Animation
 var backgroundX = 0;
@@ -41,10 +40,7 @@ window.preload = function () {
 	// Preload all barriers (see VARIANTS in Barrier for which files)
 	Barrier.preload();
 	
-	//put all the jumping enemy sprites into greenJumper variable
-	for (let i = 0; i < 5; i++) {
-		greenJumper[i] = (loadImage(`assets/gr${i}.png`));
-	}
+	jumperGIF = loadImage("assets/jumper.gif");
 }
 
 window.setup = function () {
@@ -74,6 +70,7 @@ window.setup = function () {
 	// Make two barriers
 	objWall = new Barrier("brickwall", createVector(900, 240));
 	objChair = new Barrier("lawnchair", createVector(1200, 240));
+
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -162,7 +159,8 @@ window.draw = function () {
 	
 	// needs movement added, testing stage
 	image(
-		greenJumper[jumperFrame],
+		//greenJumper[jumperFrame],
+		jumperGIF,
 		objChair.position.x + 130,
 		objChair.position.y + 60,
 		40, 40
