@@ -26,7 +26,7 @@ var backgroundSpeed = 3; // how fast background moves
 var controls;
 
 let player, runner;
-let objWall, objChair;
+let objWall, objChair, objJumper;
 
 window.preload = function () {
 	// Load graphics
@@ -38,9 +38,7 @@ window.preload = function () {
 	Runner.preload();
 	
 	// Preload all barriers (see VARIANTS in Barrier for which files)
-	Barrier.preload();
-	
-	jumperGIF = loadImage("assets/jumper.gif");
+	Barrier.preload();	
 }
 
 window.setup = function () {
@@ -70,6 +68,7 @@ window.setup = function () {
 	// Make two barriers
 	objWall = new Barrier("brickwall", createVector(900, 240));
 	objChair = new Barrier("lawnchair", createVector(1200, 240));
+	objJumper = new Barrier("jumpEnemy", createVector(1400,230));
 
 }
 
@@ -106,6 +105,7 @@ function update() {
 	
 	objWall.move(backgroundSpeed); // move obstacle with background
 	objChair.move(backgroundSpeed); // move obstacle with background
+	objJumper.move(backgroundSpeed);
 	
 	// The following works for each object by comparing its location to the
 	// other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
@@ -131,6 +131,16 @@ function update() {
 			objChair.position.x = random(850, 2000);
 		}
 	}
+	if (objJumper.position.x < -200) { // if it goes off screen
+		objJumper.position.x = random(850, 2000);	
+		while (
+			/**/((objJumper.position.x - objWall.position.x) < 200)
+			||  ((objWall.position.x - objJumper.position.x) > -200)
+		) { // if too close to other object
+			objJumper.position.x = random(850, 2000);
+		}	
+	}
+	
 	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
@@ -147,6 +157,7 @@ window.draw = function () {
 	image(gfxBackground, Math.round(backgroundX), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
 	
+	objJumper.draw(); //draw first so it appears behind runner
 	// Runner
 	runner.draw();
 	
@@ -157,14 +168,7 @@ window.draw = function () {
 	objWall.draw();
 	objChair.draw();
 	
-	// needs movement added, testing stage
-	image(
-		//greenJumper[jumperFrame],
-		jumperGIF,
-		objChair.position.x + 130,
-		objChair.position.y + 60,
-		40, 40
-	);
+	
 }
 
 window.keyPressed = function () {

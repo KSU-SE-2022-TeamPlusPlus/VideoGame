@@ -12,6 +12,10 @@ export class Barrier {
 			image: "assets/lawnchair.png",
 			size: new p5.Vector(100, 100),
 		},
+		jumpEnemy: {
+			image: "assets/jumper.gif",
+			size: new p5.Vector(40, 40),
+		},
 	};
 	
 	static preload() {
