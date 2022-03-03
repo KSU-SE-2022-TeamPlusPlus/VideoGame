@@ -1,4 +1,4 @@
-const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
+var PLAYER_HOME = new p5.Vector(225, 333); // bottom center,variable so lanes can change
 const PLAYER_SIZE = new p5.Vector(64, 64);
 
 // TODO: put somewhere else
@@ -27,6 +27,12 @@ export class Player {
 				this.velocity.y = -5;
 				this.grounded = false;
 			}
+			if (controls.left.on) {					//moves ball into other lanes
+				PLAYER_HOME.y = PLAYER_HOME.y - 1;
+			}
+			if (controls.right.on) {
+				PLAYER_HOME.y = PLAYER_HOME.y + 1;
+			}			
 		}
 	}
 	
