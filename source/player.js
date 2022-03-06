@@ -27,10 +27,10 @@ export class Player {
 				this.velocity.y = -5;
 				this.grounded = false;
 			}
-			if (controls.left.on) {					//moves ball into other lanes
+			if (controls.up.on) {					//moves ball into other lanes
 				PLAYER_HOME.y = PLAYER_HOME.y - 1;
 			}
-			if (controls.right.on) {
+			if (controls.down.on) {
 				PLAYER_HOME.y = PLAYER_HOME.y + 1;
 			}			
 		}

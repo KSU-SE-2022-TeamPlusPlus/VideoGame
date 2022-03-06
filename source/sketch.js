@@ -48,9 +48,9 @@ window.setup = function () {
 	time = 0; // Time in seconds
 	
 	controls = {
-		jump: { binding: UP_ARROW, },
-		left: { binding: LEFT_ARROW, },
-		right: { binding: RIGHT_ARROW, },
+		jump: { binding: 32, },
+		up: { binding: UP_ARROW, },
+		down: { binding: DOWN_ARROW, },
 	};
 	for (let control of Object.values(controls)) {
 		control.on = false;
