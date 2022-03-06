@@ -1,4 +1,4 @@
-var PLAYER_HOME = new p5.Vector(225, 333); // bottom center,variable so lanes can change
+const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
 const PLAYER_SIZE = new p5.Vector(40, 40);
 
 // TODO: put somewhere else
@@ -23,16 +23,19 @@ export class Player {
 	// Controls the player with a Controls object.
 	control(controls) {
 		if (this.grounded) {
+			// Jump if ball on ground.
 			if (controls.jump.on) {
 				this.velocity.y = -5;
 				this.grounded = false;
 			}
-			if (controls.up.on) {					//moves ball into other lanes
-				PLAYER_HOME.y = PLAYER_HOME.y - 1;
+			
+			// Move ball between lanes
+			if (controls.up.on) {
+				this.position.z = this.position.z - 1;
 			}
 			if (controls.down.on) {
-				PLAYER_HOME.y = PLAYER_HOME.y + 1;
-			}			
+				this.position.z = this.position.z + 1;
+			}
 		}
 	}
 	
@@ -66,7 +69,8 @@ export class Player {
 		
 		translate(
 			PLAYER_HOME.x + this.position.x,
-			PLAYER_HOME.y + this.position.y
+			PLAYER_HOME.y + this.position.y + this.position.z
+			// TODO: real "world space" instead of this
 		);
 		// <- could scale() here for a bounce effect
 		translate(0, -PLAYER_SIZE.y / 2);
