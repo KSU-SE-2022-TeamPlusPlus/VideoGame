@@ -41,15 +41,15 @@ window.preload = function () {
 }
 
 window.setup = function () {
-	// Canvas size in pixels
+	// Create a canvas with the specified size, returning its HTML element.
 	let c = createCanvas(CANVAS_SIZE.x, CANVAS_SIZE.y).elt;
-	c.tabIndex = -1; // make canvas focusable
+	c.tabIndex = -1; // Make the canvas focusable.
 	
 	time = 0; // Time in seconds
 	
 	controls = {
-		jump: { binding: 32, },
-		up: { binding: UP_ARROW, },
+		jump: { binding: 32,         },
+		up:   { binding: UP_ARROW,   },
 		down: { binding: DOWN_ARROW, },
 	};
 	for (let control of Object.values(controls)) {
@@ -69,7 +69,6 @@ window.setup = function () {
 	objChair = new Barrier("lawnchair", createVector(1200, 240));
 	objJumper = new Barrier("jumpEnemy", createVector(1400,230));
 	objStump = new Barrier("treeStump", createVector(1400,345));
-
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -83,13 +82,18 @@ function update() {
 	// resulting in deltaTimes ranging from half a second to 4 seconds. this is
 	// annoying because deltaTime should be close to your screen's refresh rate.
 	// i have fixed issues caused by this with the following line:
-	dt = Math.min(dt, 1/30);
+	
+	// If delta time is too high, cap it at a 30th of a second.
+	dt = Math.min(Math.max(dt, 1/60), 1/30);
 	// the worst possible step the game can take forward is a 30th of a second.
 	
 	time += dt; // to seconds, for use in time
 	
 	// Controls
 	
+	// If game canvas element is not focused, release all controls.
+	// This fixes "sticky controls" (where p5 misses the key release event
+	// due to not having focus on its canvas) and should not impact normal play.
 	if (!focused) {
 		for (let control of Object.values(controls)) {
 			control.on = false;
@@ -103,8 +107,9 @@ function update() {
 	player.update(dt);
 	runner.update(dt);
 	
-	objWall.move(backgroundSpeed); // move obstacle with background
-	objChair.move(backgroundSpeed); // move obstacle with background
+	// Move obstacles with background
+	objWall.move(backgroundSpeed);
+	objChair.move(backgroundSpeed);
 	objJumper.move(backgroundSpeed);
 	objStump.move(backgroundSpeed);
 	
@@ -141,11 +146,10 @@ function update() {
 			objJumper.position.x = random(850, 2000);
 		}	
 	}
-
+	
 	if (objStump.position.x < -200) { // if it goes off screen
 		objStump.position.x = random(2050, 3000);
 	}
-	
 	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
@@ -162,7 +166,9 @@ window.draw = function () {
 	image(gfxBackground, Math.round(backgroundX), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
 	
-	objJumper.draw(); //draw first so it appears behind runner
+	// Draw first so it appears behind runner
+	objJumper.draw();
+	
 	// Runner
 	runner.draw();
 	
@@ -173,8 +179,6 @@ window.draw = function () {
 	objWall.draw();
 	objChair.draw();
 	objStump.draw();
-	
-	
 }
 
 window.keyPressed = function () {
