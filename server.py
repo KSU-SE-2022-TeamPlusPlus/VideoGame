@@ -28,8 +28,10 @@ Handler.extensions_map[".html"] = "text/html"
 Handler.extensions_map[".js"] = "text/javascript"
 Handler.extensions_map[".jsm"] = "text/javascript"
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-	print("Serving at localhost:" + str(PORT))
-	
-	# This will serve the page until you press Ctrl+C in the terminal.
-	httpd.serve_forever()
+try:
+	with socketserver.TCPServer(("", PORT), Handler) as httpd:
+		print("Serving at localhost:" + str(PORT) + " (press Ctrl+C to stop)")
+		
+		httpd.serve_forever()
+except KeyboardInterrupt:
+	pass
