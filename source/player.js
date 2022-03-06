@@ -8,7 +8,7 @@ export class Player {
 	static image;
 	
 	static preload() {
-		Player.image = loadImage("assets/basketball.png");
+		Player.image = loadImage("assets/rolling_ball.gif");
 	}
 	
 	constructor() {
