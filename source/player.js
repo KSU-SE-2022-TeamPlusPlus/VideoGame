@@ -1,5 +1,5 @@
 var PLAYER_HOME = new p5.Vector(225, 333); // bottom center,variable so lanes can change
-const PLAYER_SIZE = new p5.Vector(64, 64);
+const PLAYER_SIZE = new p5.Vector(40, 40);
 
 // TODO: put somewhere else
 const GRAVITY = new p5.Vector(0, 6);
