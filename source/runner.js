@@ -1,6 +1,6 @@
 import { Timer } from "./timer.js";
 
-const RUNNER_HOME = new p5.Vector(15, 205);
+const RUNNER_HOME = new p5.Vector(15, 225);
 
 export class Runner {
 	static image;
