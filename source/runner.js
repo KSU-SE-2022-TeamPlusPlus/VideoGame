@@ -1,12 +1,15 @@
 import { Timer } from "./timer.js";
 
-const RUNNER_HOME = new p5.Vector(60, 245);
+const RUNNER_HOME = new p5.Vector(60, 350);
+const RUNNER_SIZE = new p5.Vector(150, 150);
 
 export class Runner {
 	static image;
+	// static delozier;
 	
 	static preload() {
-		Runner.image = loadImage("assets/tractor.png");
+		Runner.image = loadImage("assets/dog_runner.gif");
+		// Runner.delozier = loadImage("assets/tractor.png");
 	}
 	
 	constructor() {
@@ -17,15 +20,15 @@ export class Runner {
 	
 	update(dt) {
 		this.time += dt;
-		this.yOffset = Math.round(Math.abs(Math.sin(this.time * TAU * 16)) * 2);
+		// this.yOffset = Math.round(Math.abs(Math.sin(this.time * TAU * 16)) * 2);
 	}
 	
 	draw() {
 		image(
 			Runner.image,
-			RUNNER_HOME.x - 250 / 2,
-			RUNNER_HOME.y - 250 / 2 + this.yOffset,
-			250, 250
+			RUNNER_HOME.x - RUNNER_SIZE.x / 2,
+			RUNNER_HOME.y - RUNNER_SIZE.y + this.yOffset,
+			RUNNER_SIZE.x, RUNNER_SIZE.y
 		);
 	}
 }
