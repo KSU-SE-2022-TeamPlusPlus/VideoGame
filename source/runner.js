@@ -3,13 +3,10 @@ import { Timer } from "./timer.js";
 const RUNNER_HOME = new p5.Vector(15, 205);
 
 export class Runner {
-	static image = [];
+	static image;
 	
 	static preload() {
-		Runner.image = [];
-		for (let i = 0; i < 7; i++) {
-			Runner.image.push(loadImage(`assets/runner${i}.png`));
-		}
+		Runner.image = loadImage("assets/dog_runner.gif");
 	}
 	
 	constructor() {
@@ -18,15 +15,10 @@ export class Runner {
 	}
 	
 	update(dt) {
-		// If enough time has passed...
-		this.walkTimer.step(dt);
-		if (this.walkTimer.isTicked()) {
-			// ...switch the runner's frame to the next one.
-			this.frame = (this.frame + 1) % Runner.image.length;
-		}
+		// Nothing here yet.
 	}
 	
 	draw() {
-		image(Runner.image[this.frame], RUNNER_HOME.x, RUNNER_HOME.y, 130, 130);
+		image(Runner.image, RUNNER_HOME.x, RUNNER_HOME.y, 130, 130);
 	}
 }
