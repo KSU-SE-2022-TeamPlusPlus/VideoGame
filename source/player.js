@@ -37,6 +37,7 @@ export class Player {
 				if (!(this.current_lane >= 2)) {
 					if(delay_count == 4){
 						this.position.z = this.position.z - 50;
+						this.position.x = this.position.x + 10;
 						++this.current_lane;
 						delay_count = 0;
 					}
@@ -47,6 +48,7 @@ export class Player {
 				if (!(this.current_lane <= 0)) {
 					if(delay_count == 4){
 						this.position.z = this.position.z + 50;
+						this.position.x = this.position.x - 10;
 						--this.current_lane;
 						delay_count = 0;
 					}
