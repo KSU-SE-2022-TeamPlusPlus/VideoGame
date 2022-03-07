@@ -2,6 +2,7 @@
 
 // Utility
 import { Timer } from "./timer.js";
+import { Input } from "./input.js";
 
 // Game Objects
 import { Runner } from "./runner.js";
@@ -22,7 +23,7 @@ let gfxBackground;
 var backgroundX = 0;
 var backgroundSpeed = 3; // how fast background moves
 
-var controls;
+let input;
 
 let player, runner;
 let objWall, objChair, objJumper, objStump;
@@ -47,14 +48,11 @@ window.setup = function () {
 	
 	time = 0; // Time in seconds
 	
-	controls = {
+	input = new Input({
 		jump: { binding: 32,         },
 		up:   { binding: UP_ARROW,   },
 		down: { binding: DOWN_ARROW, },
-	};
-	for (let control of Object.values(controls)) {
-		control.on = false;
-	}
+	});
 	
 	colorMode(RGB, 1); // Change color format
 	// Colors are now percentages from [0, 1]
@@ -84,23 +82,24 @@ function update() {
 	// i have fixed issues caused by this with the following line:
 	
 	// If delta time is too high, cap it at a 30th of a second.
-	dt = Math.min(Math.max(dt, 1/60), 1/30);
+	dt = Math.min(dt, 1/30);
 	// the worst possible step the game can take forward is a 30th of a second.
 	
 	time += dt; // to seconds, for use in time
 	
 	// Controls
 	
-	// If game canvas element is not focused, release all controls.
-	// This fixes "sticky controls" (where p5 misses the key release event
-	// due to not having focus on its canvas) and should not impact normal play.
-	if (!focused) {
-		for (let control of Object.values(controls)) {
-			control.on = false;
-		}
+	if (focused) {
+		// Update Input object
+		input.update(dt);
+	} else {
+		// If game canvas element is not focused, release all controls.
+		// This fixes "sticky controls" (where p5 misses the key release event
+		// due to not having focus on its canvas) and should not impact normal play.
+		input.resetAll(true);
 	}
 	
-	player.control(controls);
+	player.control(dt, input);
 	
 	// Physics & Animations
 	
@@ -179,27 +178,14 @@ window.draw = function () {
 	objWall.draw();
 	objChair.draw();
 	objStump.draw();
+	
+	input.debugDraw();
 }
 
 window.keyPressed = function () {
-	if (!controls) return;
-	for (let control of Object.values(controls)) {
-		if (keyCode === control.binding)
-			control.on = true;
-	}
+	if (input) input.keyPressed();
 }
 
 window.keyReleased = function () {
-	if (!controls) return;
-	for (let control of Object.values(controls)) {
-		if (keyCode === control.binding)
-			control.on = false;
-	}
-}
-
-function worldToScreen(v) {
-	return new p5.Vector(
-		v.x - v.z * 0.75,
-		v.y - v.z * 1
-	);
+	if (input) input.keyReleased();
 }

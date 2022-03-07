@@ -1,6 +1,7 @@
+import { Timer } from "./timer.js";
+
 const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
 const PLAYER_SIZE = new p5.Vector(40, 40);
-var delay_count = 4;
 
 // TODO: put somewhere else
 const GRAVITY = new p5.Vector(0, 6);
@@ -19,40 +20,43 @@ export class Player {
 		this.rotation = 0;
 		
 		this.grounded = true;
-
-		this.current_lane = 1;
+		
+		this.currentLane = 0;
+		this.laneSwitchRepeat = new Timer(1/10);
 	}
 	
-	// Controls the player with a Controls object.
-	control(controls) {
+	// Controls the player with an Input object.
+	control(dt, input) {
 		if (this.grounded) {
 			// Jump if ball on ground.
-			if (controls.jump.on) {
+			if (input.on('jump')) {
 				this.velocity.y = -5;
 				this.grounded = false;
 			}
-			
-			// Move ball between lanes
-			if (controls.up.on) {
-				if (!(this.current_lane >= 2)) {
-					if(delay_count == 4){
-						this.position.z = this.position.z - 50;
-						this.position.x = this.position.x + 10;
-						++this.current_lane;
-						delay_count = 0;
-					}
-					else { ++delay_count; }
-				}	
+		}
+		
+		// Ignore inputs if both are pressed at once.
+		if (input.on('up') != input.on('down')) {
+			if (input.justPressed('up') || input.justPressed('down')) {
+				this.laneSwitchRepeat.reset();
+			} else {
+				this.laneSwitchRepeat.step(dt);
 			}
-			if (controls.down.on) {
-				if (!(this.current_lane <= 0)) {
-					if(delay_count == 4){
-						this.position.z = this.position.z + 50;
-						this.position.x = this.position.x - 10;
-						--this.current_lane;
-						delay_count = 0;
+			
+			if (input.on('up')) {
+				if (input.justPressed('up')
+				||  this.laneSwitchRepeat.isTicked()) {
+					if (this.currentLane > -1) {
+						this.currentLane--;
 					}
-					else { ++delay_count; }	
+				}
+			}
+			if (input.on('down')) {
+				if (input.justPressed('down')
+				||  this.laneSwitchRepeat.isTicked()) {
+					if (this.currentLane < 1) {
+						this.currentLane++;
+					}
 				}
 			}
 		}
@@ -80,6 +84,8 @@ export class Player {
 			// Roll normally
 			this.rotation += dt;
 		}
+		
+		this.position.z = this.currentLane * 32;
 	}
 	
 	// Draws the player.
@@ -94,7 +100,7 @@ export class Player {
 		// <- could scale() here for a bounce effect
 		translate(0, -PLAYER_SIZE.y / 2);
 		scale(PLAYER_SIZE);
-		//rotate(this.rotation * TAU); This function is now uncessesary due to using a gif instead 
+		// rotate(this.rotation * TAU); // We're using a GIF that rotates on its own.
 		
 		image(Player.image, -0.5, -0.5, 1, 1);
 		
