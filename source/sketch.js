@@ -17,6 +17,7 @@ let time = 0;
 
 // Graphics
 let gfxBackground;
+let gfxDog;
 
 // Animation
 var backgroundX = 0;
@@ -31,6 +32,7 @@ window.preload = function () {
 	// Load graphics
 
 	gfxBackground = loadImage("assets/backyard pixel path.png");
+	gfxDog = loadImage("assets/dog_runner.gif");
 
 	// Preload player / runner graphics
 	Player.preload();
@@ -170,7 +172,7 @@ window.draw = function () {
 	objJumper.draw();
 	
 	// Runner
-	runner.draw();
+	//runner.draw();
 	
 	// Ball
 	player.draw();
@@ -179,6 +181,8 @@ window.draw = function () {
 	objWall.draw();
 	objChair.draw();
 	objStump.draw();
+
+	image(gfxDog,15,215,150,150);
 }
 
 window.keyPressed = function () {
