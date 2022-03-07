@@ -1,5 +1,6 @@
 const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
 const PLAYER_SIZE = new p5.Vector(40, 40);
+var delay_count = 4;
 
 // TODO: put somewhere else
 const GRAVITY = new p5.Vector(0, 6);
@@ -18,6 +19,8 @@ export class Player {
 		this.rotation = 0;
 		
 		this.grounded = true;
+
+		this.current_lane = 1;
 	}
 	
 	// Controls the player with a Controls object.
@@ -31,10 +34,24 @@ export class Player {
 			
 			// Move ball between lanes
 			if (controls.up.on) {
-				this.position.z = this.position.z - 1;
+				if (!(this.current_lane >= 2)) {
+					if(delay_count == 4){
+						this.position.z = this.position.z - 50;
+						++this.current_lane;
+						delay_count = 0;
+					}
+					else { ++delay_count; }
+				}	
 			}
 			if (controls.down.on) {
-				this.position.z = this.position.z + 1;
+				if (!(this.current_lane <= 0)) {
+					if(delay_count == 4){
+						this.position.z = this.position.z + 50;
+						--this.current_lane;
+						delay_count = 0;
+					}
+					else { ++delay_count; }	
+				}
 			}
 		}
 	}
@@ -75,7 +92,7 @@ export class Player {
 		// <- could scale() here for a bounce effect
 		translate(0, -PLAYER_SIZE.y / 2);
 		scale(PLAYER_SIZE);
-		rotate(this.rotation * TAU);
+		//rotate(this.rotation * TAU); This function is now uncessesary due to using a gif instead 
 		
 		image(Player.image, -0.5, -0.5, 1, 1);
 		
