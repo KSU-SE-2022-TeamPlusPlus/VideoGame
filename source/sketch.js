@@ -8,6 +8,7 @@ import { Input } from "./input.js";
 import { Runner } from "./runner.js";
 import { Player } from "./player.js";
 import { Barrier } from "./barrier.js";
+import { BarrierManager } from "./barrierManager.js";
 
 // Runaway Ball, Roll On!! (working title???)
 // Team++
@@ -26,7 +27,7 @@ var backgroundSpeed = 3; // how fast background moves
 let input;
 
 let player, runner;
-let objWall, objChair, objJumper, objStump;
+let barrierManager;
 
 window.preload = function () {
 	// Load graphics
@@ -38,7 +39,7 @@ window.preload = function () {
 	Runner.preload();
 	
 	// Preload all barriers (see VARIANTS in Barrier for which files)
-	Barrier.preload();	
+	Barrier.preload();
 }
 
 window.setup = function () {
@@ -62,11 +63,9 @@ window.setup = function () {
 	player = new Player();
 	runner = new Runner();
 	
-	// Make two barriers
-	objWall = new Barrier("brickwall", createVector(900, 240));
-	objChair = new Barrier("lawnchair", createVector(1200, 240));
-	objJumper = new Barrier("jumpEnemy", createVector(1400,230));
-	objStump = new Barrier("treeStump", createVector(1400,345));
+	// Make barriers
+	barrierManager = new BarrierManager();
+	barrierManager.pushBarrier("brickwall");
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -107,48 +106,7 @@ function update() {
 	runner.update(dt);
 	
 	// Move obstacles with background
-	objWall.move(backgroundSpeed);
-	objChair.move(backgroundSpeed);
-	objJumper.move(backgroundSpeed);
-	objStump.move(backgroundSpeed);
-	
-	// The following works for each object by comparing its location to the
-	// other objects. This should work if we are not doing more than 5-10 objects/barriers. Each new item
-	// will need to get compared to the new one, and if too close, it gets re-positioned.
-	
-	// Reposition objects if they overlap eachother.
-	// TODO: This should be an "obstacle manager"'s job.
-	if (objWall.position.x < -200) { // if it goes off screen
-		objWall.position.x = random(850, 2000);
-		while (
-			/**/((objWall.position.x - objChair.position.x) < 400)
-			||  ((objChair.position.x - objWall.position.x) > -400)
-		) { // if too close to other object
-			objWall.position.x = random(850, 2000);
-		}
-	}
-	if (objChair.position.x < -200) { // if it goes off screen
-		objChair.position.x = random(850, 2000);
-		while (
-			/**/((objChair.position.x - objWall.position.x) < 400)
-			||  ((objWall.position.x - objChair.position.x) > -400)
-		) { // if too close to other object
-			objChair.position.x = random(850, 2000);
-		}
-	}
-	if (objJumper.position.x < -200) { // if it goes off screen
-		objJumper.position.x = random(850, 2000);	
-		while (
-			/**/((objJumper.position.x - objWall.position.x) < 200)
-			||  ((objWall.position.x - objJumper.position.x) > -200)
-		) { // if too close to other object
-			objJumper.position.x = random(850, 2000);
-		}	
-	}
-	
-	if (objStump.position.x < -200) { // if it goes off screen
-		objStump.position.x = random(2050, 3000);
-	}
+	barrierManager.update(dt, backgroundSpeed);
 	
 	// Wrap background
 	backgroundX -= backgroundSpeed;
@@ -165,9 +123,6 @@ window.draw = function () {
 	image(gfxBackground, Math.round(backgroundX), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
 	
-	// Draw first so it appears behind runner
-	objJumper.draw();
-	
 	// Runner
 	runner.draw();
 	
@@ -175,9 +130,7 @@ window.draw = function () {
 	player.draw();
 	
 	// Barriers
-	objWall.draw();
-	objChair.draw();
-	objStump.draw();
+	barrierManager.draw();
 	
 	input.debugDraw();
 }
