@@ -53,3 +53,15 @@ code#err {
 pre.errored code#err {
 	color: red;
 }
+
+a:link {
+	color: cyan;
+	text-decoration: none;
+}
+a:visited {
+	color: orchid;
+}
+a:hover {
+	color: white;
+	background-color: blue;
+}
