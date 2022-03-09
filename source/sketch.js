@@ -113,7 +113,7 @@ function update() {
 	if (backgroundX < -width) backgroundX = backgroundX % width;
 }
 
-window.draw = function () {
+window.draw = function () {		
 	update();
 	
 	// Clear screen
