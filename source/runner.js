@@ -7,9 +7,15 @@ export class Runner {
 	static image;
 	// static delozier;
 	
+	static sfxBark;
+	
 	static preload() {
 		Runner.image = loadImage("assets/dog_runner.gif");
 		// Runner.delozier = loadImage("assets/tractor.png");
+		
+		Runner.sfxBark = loadSound("assets/bark.mp3");
+		Runner.sfxBark.setVolume(1/2);
+		Runner.sfxBark.playMode('untilDone');
 	}
 	
 	constructor() {
@@ -19,6 +25,10 @@ export class Runner {
 	}
 	
 	update(dt) {
+		// if (WORLD.soundsEnabled) {
+			Runner.sfxBark.play();
+		// }
+		
 		this.time += dt;
 		// this.yOffset = Math.round(Math.abs(Math.sin(this.time * TAU * 16)) * 2);
 	}

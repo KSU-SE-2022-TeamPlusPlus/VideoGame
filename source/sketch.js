@@ -24,6 +24,8 @@ let gfxBackground;
 var backgroundX = 0;
 var backgroundSpeed = 3; // how fast background moves
 
+let backgroundMusic;
+
 let input;
 
 let player, runner;
@@ -40,6 +42,15 @@ window.preload = function () {
 	
 	// Preload all barriers (see VARIANTS in Barrier for which files)
 	Barrier.preload();
+	
+	// Load & initialize audio
+	
+	// Tell p5 what file types we'll use for sounds (???)
+	soundFormats('mp3');
+	
+	// Preload background music
+	backgroundMusic = loadSound("assets/monkeys_spinning_monkeys_-_incompetech.mp3");
+	backgroundMusic.setLoop(true);
 }
 
 window.setup = function () {
@@ -66,6 +77,9 @@ window.setup = function () {
 	// Make barriers
 	barrierManager = new BarrierManager();
 	barrierManager.pushBarrier("brickwall");
+	
+	// Start music
+	backgroundMusic.play();
 }
 
 // This isn't necessarily required, but it does help separate state changes

@@ -2,19 +2,20 @@ import { Timer } from "./timer.js";
 
 const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
 const PLAYER_SIZE = new p5.Vector(40, 40);
-var bounce = new Audio('assets/boing.mp3');
-var backAudio = new Audio('assets/Monkeys-Spinning-Monkeys.mp3');
-var dogAudio = new Audio('assets/Large-dog-bark-sound-effect.mp3');
-var soundOn = false;
-dogAudio.volume = .5;
+
 // TODO: put somewhere else
 const GRAVITY = new p5.Vector(0, 6);
 
 export class Player {
 	static image;
 	
+	static sfxBoing;
+	
 	static preload() {
-		Player.image = loadImage("assets/rolling_ball.gif");				
+		Player.image = loadImage("assets/rolling_ball.gif");
+		
+		Player.sfxBoing = loadSound("assets/boing.mp3");
+		Player.sfxBoing.setVolume(0.9);
 	}
 	
 	constructor() {
@@ -34,9 +35,13 @@ export class Player {
 		if (this.grounded) {
 			// Jump if ball on ground.
 			if (input.on('jump')) {
-				bounce.play(); //jump sound effect when jumping				
 				this.velocity.y = -5;
 				this.grounded = false;
+				
+				// Play the jump sound effect too.
+				// if (WORLD.soundsEnabled) {
+					Player.sfxBoing.play();
+				// }
 			}
 		}
 		
@@ -69,8 +74,6 @@ export class Player {
 	
 	// Simulates physics and animates the player too.
 	update(dt) {
-		backAudio.play();
-		dogAudio.play();
 		// Only simulate if you're off the ground.
 		if (!this.grounded) {
 			// Simulate!
@@ -97,10 +100,6 @@ export class Player {
 	
 	// Draws the player.
 	draw() {
-
-		if (!soundOn){
-			soundOn=true;
-		}
 		push(); // Push new transform context
 		
 		translate(
