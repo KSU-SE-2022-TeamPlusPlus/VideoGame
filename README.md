@@ -35,3 +35,7 @@ You can also run the most recent commit by going to [the GitHub Pages instance](
 * Ball Graphic - from [Kenney.nl](https://www.kenney.nl/assets/sports-pack) (Creative Commons)
 * p5.js TypeScript Definitions - from [the `.zip` linked here](https://stackoverflow.com/a/60693021/)
 * Character Graphic - from https://www.pngwing.com/en/free-png-xkfra (Fair Use License DMCA)
+* Spinning Monkeys Kevin MacLeod (incompetech.com)
+  Licensed under Creative Commons: By Attribution 3.0 License
+  http://creativecommons.org/licenses/by/3.0/
+  Music promoted by https://www.chosic.com/free-music/all/ 
