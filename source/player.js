@@ -38,9 +38,9 @@ export class Player {
 				this.grounded = false;
 				
 				// Play the jump sound effect too.
-				// if (WORLD.soundsEnabled) {
+				if (WORLD.soundsEnabled) {
 					Player.sfxBoing.play();
-				// }
+				}
 			}
 		}
 		

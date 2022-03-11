@@ -62,9 +62,10 @@ window.setup = function () {
 	time = 0; // Time in seconds
 	
 	input = new Input({
-		jump: { binding: 32,         },
+		jump: { binding: 32,         }, // -> Space
 		up:   { binding: UP_ARROW,   },
 		down: { binding: DOWN_ARROW, },
+		mute: { binding: 0x23,       }, // -> End
 	});
 	
 	colorMode(RGB, 1); // Change color format
@@ -80,7 +81,9 @@ window.setup = function () {
 	barrierManager.pushBarrier("brickwall");
 	
 	// Start music
-	backgroundMusic.play();
+	if (WORLD.soundsEnabled) {
+		backgroundMusic.play();
+	}
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -111,6 +114,11 @@ function update() {
 		// This fixes "sticky controls" (where p5 misses the key release event
 		// due to not having focus on its canvas) and should not impact normal play.
 		input.resetAll(true);
+	}
+	
+	if (input.justPressed('mute')) {
+		WORLD.soundsEnabled = !WORLD.soundsEnabled;
+		// TODO: doesn't restart bg music
 	}
 	
 	player.control(dt, input);

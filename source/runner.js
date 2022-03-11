@@ -1,5 +1,7 @@
 import { Timer } from "./timer.js";
 
+import { WORLD } from "./world.js";
+
 const RUNNER_HOME = new p5.Vector(60, 350);
 const RUNNER_SIZE = new p5.Vector(150, 150);
 
@@ -25,9 +27,9 @@ export class Runner {
 	}
 	
 	update(dt) {
-		// if (WORLD.soundsEnabled) {
+		if (WORLD.soundsEnabled) {
 			Runner.sfxBark.play();
-		// }
+		}
 		
 		this.time += dt;
 		// this.yOffset = Math.round(Math.abs(Math.sin(this.time * TAU * 16)) * 2);
