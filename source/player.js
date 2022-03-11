@@ -42,29 +42,29 @@ export class Player {
 					Player.sfxBoing.play();
 				}
 			}
-		}
 		
-		// Ignore inputs if both are pressed at once.
-		if (input.on('up') != input.on('down')) {
-			if (input.justPressed('up') || input.justPressed('down')) {
-				this.laneSwitchRepeat.reset();
-			} else {
-				this.laneSwitchRepeat.step(dt);
-			}
-			
-			if (input.on('up')) {
-				if (input.justPressed('up')
-				||  this.laneSwitchRepeat.isTicked()) {
-					if (this.currentLane > -1) {
-						this.currentLane--;
+			// Ignore inputs if both are pressed at once.
+			if (input.on('up') != input.on('down')) {
+				if (input.justPressed('up') || input.justPressed('down')) {
+					this.laneSwitchRepeat.reset();
+				} else {
+					this.laneSwitchRepeat.step(dt);
+				}
+				
+				if (input.on('up')) {
+					if (input.justPressed('up')
+					||  this.laneSwitchRepeat.isTicked()) {
+						if (this.currentLane > -1) {
+							this.currentLane--;
+						}
 					}
 				}
-			}
-			if (input.on('down')) {
-				if (input.justPressed('down')
-				||  this.laneSwitchRepeat.isTicked()) {
-					if (this.currentLane < 1) {
-						this.currentLane++;
+				if (input.on('down')) {
+					if (input.justPressed('down')
+					||  this.laneSwitchRepeat.isTicked()) {
+						if (this.currentLane < 1) {
+							this.currentLane++;
+						}
 					}
 				}
 			}
