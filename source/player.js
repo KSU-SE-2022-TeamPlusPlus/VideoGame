@@ -1,10 +1,9 @@
 import { Timer } from "./timer.js";
 
+import { WORLD } from "./world.js";
+
 const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
 const PLAYER_SIZE = new p5.Vector(40, 40);
-
-// TODO: put somewhere else
-const GRAVITY = new p5.Vector(0, 6);
 
 export class Player {
 	static image;
@@ -35,7 +34,7 @@ export class Player {
 		if (this.grounded) {
 			// Jump if ball on ground.
 			if (input.on('jump')) {
-				this.velocity.y = -5;
+				this.velocity.y = 5;
 				this.grounded = false;
 				
 				// Play the jump sound effect too.
@@ -77,12 +76,12 @@ export class Player {
 		// Only simulate if you're off the ground.
 		if (!this.grounded) {
 			// Simulate!
-			this.position.y += this.velocity.y;
-			this.velocity.y += GRAVITY.y * dt;
+			this.position.y += this.velocity.y * dt;
+			this.velocity.y += WORLD.GRAVITY.y * dt;
 			
 			// If that put you below the ground,
 			// you're grounded and you can jump again.
-			if (this.position.y > 0) {
+			if (this.position.y < 0) {
 				this.position.y = 0;
 				this.velocity.y = 0;
 				this.grounded = true;
@@ -95,18 +94,14 @@ export class Player {
 			this.rotation += dt;
 		}
 		
-		this.position.z = this.currentLane * 32;
+		this.position.z = this.currentLane;
 	}
 	
 	// Draws the player.
 	draw() {
 		push(); // Push new transform context
 		
-		translate(
-			PLAYER_HOME.x + this.position.x,
-			PLAYER_HOME.y + this.position.y + this.position.z
-			// TODO: real "world space" instead of this
-		);
+		translate(WORLD.toScreen(this.position));
 		// <- could scale() here for a bounce effect
 		translate(0, -PLAYER_SIZE.y / 2);
 		scale(PLAYER_SIZE);

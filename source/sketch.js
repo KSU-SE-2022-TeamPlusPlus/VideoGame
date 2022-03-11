@@ -3,6 +3,7 @@
 // Utility
 import { Timer } from "./timer.js";
 import { Input } from "./input.js";
+import { WORLD } from "./world.js";
 
 // Game Objects
 import { Runner } from "./runner.js";
@@ -136,6 +137,8 @@ window.draw = function () {
 	// Wrapping background
 	image(gfxBackground, Math.round(backgroundX), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
+	
+	WORLD.dbgDrawGrid();
 	
 	// Runner
 	runner.draw();
