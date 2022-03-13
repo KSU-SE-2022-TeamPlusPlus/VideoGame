@@ -30,6 +30,9 @@ export class Runner {
 		if (WORLD.soundsEnabled) {
 			Runner.sfxBark.play();
 		}
+		else{
+			Runner.sfxBark.pause();
+		}
 		
 		this.time += dt;
 		// this.yOffset = Math.round(Math.abs(Math.sin(this.time * TAU * 16)) * 2);

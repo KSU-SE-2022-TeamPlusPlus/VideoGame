@@ -14,6 +14,9 @@ import { BarrierManager } from "./barrierManager.js";
 // Runaway Ball, Roll On!! (working title???)
 // Team++
 
+//Global Variables
+var backMusicOn = false; //don't start with background music
+
 // Environment
 const CANVAS_SIZE = new p5.Vector(800, 400);
 let time = 0;
@@ -52,6 +55,8 @@ window.preload = function () {
 	// Preload background music
 	backgroundMusic = loadSound("assets/monkeys_spinning_monkeys_-_incompetech.mp3");
 	backgroundMusic.setLoop(true);
+	backgroundMusic.playMode('untilDone');
+	
 }
 
 window.setup = function () {
@@ -80,10 +85,7 @@ window.setup = function () {
 	barrierManager = new BarrierManager();
 	barrierManager.pushBarrier("brickwall");
 	
-	// Start music
-	if (WORLD.soundsEnabled) {
-		backgroundMusic.play();
-	}
+	
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -117,9 +119,25 @@ function update() {
 	}
 	
 	if (input.justPressed('mute')) {
-		WORLD.soundsEnabled = !WORLD.soundsEnabled;
+	//	WORLD.soundsEnabled = !WORLD.soundsEnabled;
+	//	backgroundMusic.play();
 		// TODO: doesn't restart bg music
+
+		// Start music
+		if (WORLD.soundsEnabled) {			
+				backgroundMusic.pause();
+				//backMusicOn = false;
+				WORLD.soundsEnabled = !WORLD.soundsEnabled;
+			}
+			else{
+				backgroundMusic.play();
+				//backMusicOn = true;
+				WORLD.soundsEnabled = true;
+			}
+		
 	}
+
+	
 	
 	player.control(dt, input);
 	
