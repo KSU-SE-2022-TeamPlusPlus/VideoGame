@@ -8,23 +8,23 @@ export class BarrierManager {
 	
 	pushBarrier(variant, ofs = 0) {
 		this.barriers.push(
-			new Barrier(variant, createVector(900 + ofs, 240))
+			new Barrier(variant, createVector(8 + ofs, 0, random(-1, 1)))
 		);
-		this.spawnRate = new Timer(1.5);
+		this.spawnRate = new Timer(2);
 	}
 	
 	// TODO: bgSpeed is strange here but whatever
 	update(dt, bgSpeed) {
 		for (let barrier of this.barriers) {
-			barrier.move(bgSpeed);
+			barrier.move(dt, bgSpeed);
 		}
 		
-		this.barriers = this.barriers.filter(b => b.position.x > -150);
+		this.barriers = this.barriers.filter(b => b.position.x > -10);
 		
 		// TODO: no
 		this.spawnRate.step(dt);
 		if (this.spawnRate.isTicked()) {
-			this.pushBarrier(random(Object.keys(Barrier.VARIANTS)), random(200));
+			this.pushBarrier(random(Object.keys(Barrier.VARIANTS)), random(4));
 		}
 	}
 	

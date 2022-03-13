@@ -2,8 +2,8 @@ import { Timer } from "./timer.js";
 
 import { WORLD } from "./world.js";
 
-const RUNNER_HOME = new p5.Vector(60, 350);
-const RUNNER_SIZE = new p5.Vector(150, 150);
+const RUNNER_HOME = new p5.Vector(-2.5, 0);
+const RUNNER_SIZE = new p5.Vector(150, 96);
 
 export class Runner {
 	static image;
@@ -36,11 +36,10 @@ export class Runner {
 	}
 	
 	draw() {
-		image(
-			Runner.image,
-			RUNNER_HOME.x - RUNNER_SIZE.x / 2,
-			RUNNER_HOME.y - RUNNER_SIZE.y + this.yOffset,
-			RUNNER_SIZE.x, RUNNER_SIZE.y
-		);
+		push();
+		translate(WORLD.toScreen(RUNNER_HOME));
+		translate(-RUNNER_SIZE.x / 2, -RUNNER_SIZE.y);
+		image(Runner.image, 0, 0 + this.yOffset, RUNNER_SIZE.x, RUNNER_SIZE.y);
+		pop();
 	}
 }

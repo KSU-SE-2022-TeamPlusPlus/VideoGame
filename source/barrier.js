@@ -2,6 +2,9 @@
 // It will allow to move() and draw() and have collision() detection
 // New barrier gets drawn automatically at a random location off screen 
 // once the current barrier has moved off screen
+
+import { WORLD } from "./world.js";
+
 export class Barrier {
 	static VARIANTS = {
 		brickwall: {
@@ -43,14 +46,15 @@ export class Barrier {
 	 
 	// Move the barrier horizontally a specified amount.
 	// Barriers should move at the same speed as the background's.
-	move(amount) {
-		this.position.x = this.position.x - amount;
+	move(dt, amount) {
+		this.position.x = this.position.x - amount * dt;
 	}
 	
 	// Draw the barrier at its position.
 	draw() {
 		push();
-		translate(this.position.x, this.position.y);
+		translate(WORLD.toScreen(this.position));
+		translate(-this.size.x / 2, -this.size.y);
 		image(this.image, 0, 0, this.size.x, this.size.y);
 		pop();
 	}

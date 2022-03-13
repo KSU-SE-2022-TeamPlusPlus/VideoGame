@@ -132,19 +132,20 @@ function update() {
 	barrierManager.update(dt, backgroundSpeed);
 	
 	// Wrap background
-	backgroundX -= backgroundSpeed;
-	if (backgroundX < -width) backgroundX = backgroundX % width;
+	// TODO: code smell
+	backgroundX -= backgroundSpeed * dt;
+	if (backgroundX < -width / WORLD.UNIT) backgroundX = backgroundX % (width / WORLD.UNIT);
 }
 
-window.draw = function () {		
+window.draw = function () {
 	update();
 	
 	// Clear screen
 	background(0);
 	
 	// Wrapping background
-	image(gfxBackground, Math.round(backgroundX), 0, width, height);
-	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
+	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT), 0, width, height);
+	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT + width), 0, width, height);
 	
 	WORLD.dbgDrawGrid();
 	
