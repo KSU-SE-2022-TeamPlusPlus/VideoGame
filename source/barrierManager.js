@@ -8,7 +8,7 @@ export class BarrierManager {
 	
 	pushBarrier(variant, ofs = 0) {
 		this.barriers.push(
-			new Barrier(variant, createVector(8 + ofs, 0, random(-1, 1)))
+			new Barrier(variant, createVector(10 + ofs, 0, Math.round(random(-1, 1))))
 		);
 		this.spawnRate = new Timer(2);
 	}
