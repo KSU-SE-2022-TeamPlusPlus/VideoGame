@@ -40,7 +40,7 @@ export class Barrier {
 		this.image = VARIANT_V.image;
 		this.size = VARIANT_V.size.copy();
 	}
-	
+	 
 	// Move the barrier horizontally a specified amount.
 	// Barriers should move at the same speed as the background's.
 	move(amount) {
