@@ -10,6 +10,7 @@ import { Runner } from "./runner.js";
 import { Player } from "./player.js";
 import { Barrier } from "./barrier.js";
 import { BarrierManager } from "./barrierManager.js";
+import { scoreTracker } from "./scoreTracker.js";
 
 // Runaway Ball, Roll On!! (working title???)
 // Team++
@@ -31,6 +32,7 @@ let input;
 
 let player, runner;
 let barrierManager;
+let distance;
 
 window.preload = function () {
 	// Load graphics
@@ -79,6 +81,8 @@ window.setup = function () {
 	// Make barriers
 	barrierManager = new BarrierManager();
 	barrierManager.pushBarrier("brickwall");
+
+	distance = new scoreTracker();
 	
 	// Start music
 	if (WORLD.soundsEnabled) {
@@ -134,6 +138,10 @@ function update() {
 	// Wrap background
 	backgroundX -= backgroundSpeed;
 	if (backgroundX < -width) backgroundX = backgroundX % width;
+	
+	//Score Tracker
+	distance.update(dt);
+
 }
 
 window.draw = function () {		
@@ -156,6 +164,9 @@ window.draw = function () {
 	
 	// Barriers
 	barrierManager.draw();
+
+	//Score Counter
+	distance.draw();
 	
 	input.debugDraw();
 }
