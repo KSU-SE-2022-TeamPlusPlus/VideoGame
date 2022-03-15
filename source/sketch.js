@@ -15,6 +15,9 @@ import { scoreTracker } from "./scoreTracker.js";
 // Runaway Ball, Roll On!! (working title???)
 // Team++
 
+//Global Variables
+var backMusicOn = false; //don't start with background music
+
 // Environment
 const CANVAS_SIZE = new p5.Vector(800, 400);
 let time = 0;
@@ -54,6 +57,8 @@ window.preload = function () {
 	// Preload background music
 	backgroundMusic = loadSound("assets/monkeys_spinning_monkeys_-_incompetech.mp3");
 	backgroundMusic.setLoop(true);
+	backgroundMusic.playMode('untilDone');
+	
 }
 
 window.setup = function () {
@@ -84,10 +89,7 @@ window.setup = function () {
 
 	distance = new scoreTracker();
 	
-	// Start music
-	if (WORLD.soundsEnabled) {
-		backgroundMusic.play();
-	}
+	
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -121,9 +123,25 @@ function update() {
 	}
 	
 	if (input.justPressed('mute')) {
-		WORLD.soundsEnabled = !WORLD.soundsEnabled;
+	//	WORLD.soundsEnabled = !WORLD.soundsEnabled;
+	//	backgroundMusic.play();
 		// TODO: doesn't restart bg music
+
+		// Start music
+		if (WORLD.soundsEnabled) {			
+				backgroundMusic.pause();
+				//backMusicOn = false;
+				WORLD.soundsEnabled = !WORLD.soundsEnabled;
+			}
+			else{
+				backgroundMusic.play();
+				//backMusicOn = true;
+				WORLD.soundsEnabled = true;
+			}
+		
 	}
+
+	
 	
 	player.control(dt, input);
 	
@@ -136,23 +154,23 @@ function update() {
 	barrierManager.update(dt, backgroundSpeed);
 	
 	// Wrap background
-	backgroundX -= backgroundSpeed;
-	if (backgroundX < -width) backgroundX = backgroundX % width;
+	// TODO: code smell
+	backgroundX -= backgroundSpeed * dt;
+	if (backgroundX < -width / WORLD.UNIT) backgroundX = backgroundX % (width / WORLD.UNIT);
 	
-	//Score Tracker
+	// Score Tracker
 	distance.update(dt);
-
 }
 
-window.draw = function () {		
+window.draw = function () {
 	update();
 	
 	// Clear screen
 	background(0);
 	
 	// Wrapping background
-	image(gfxBackground, Math.round(backgroundX), 0, width, height);
-	image(gfxBackground, Math.round(backgroundX + width), 0, width, height);
+	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT), 0, width, height);
+	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT + width), 0, width, height);
 	
 	WORLD.dbgDrawGrid();
 	
