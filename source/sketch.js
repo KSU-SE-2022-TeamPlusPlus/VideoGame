@@ -10,7 +10,7 @@ import { Runner } from "./runner.js";
 import { Player } from "./player.js";
 import { Barrier } from "./barrier.js";
 import { BarrierManager } from "./barrierManager.js";
-import { scoreTracker } from "./scoreTracker.js";
+import { ScoreTracker } from "./scoreTracker.js";
 
 // Runaway Ball, Roll On!! (working title???)
 // Team++
@@ -35,7 +35,7 @@ let input;
 
 let player, runner;
 let barrierManager;
-let distance;
+let scoreTracker;
 
 window.preload = function () {
 	// Load graphics
@@ -58,7 +58,6 @@ window.preload = function () {
 	backgroundMusic = loadSound("assets/monkeys_spinning_monkeys_-_incompetech.mp3");
 	backgroundMusic.setLoop(true);
 	backgroundMusic.playMode('untilDone');
-	
 }
 
 window.setup = function () {
@@ -87,9 +86,8 @@ window.setup = function () {
 	barrierManager = new BarrierManager();
 	barrierManager.pushBarrier("brickwall");
 
-	distance = new scoreTracker();
-	
-	
+	// Make score tracker object
+	scoreTracker = new ScoreTracker();
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -156,10 +154,11 @@ function update() {
 	// Wrap background
 	// TODO: code smell
 	backgroundX -= backgroundSpeed * dt;
-	if (backgroundX < -width / WORLD.UNIT) backgroundX = backgroundX % (width / WORLD.UNIT);
+	if (backgroundX < -width / WORLD.UNIT)
+		backgroundX = backgroundX % (width / WORLD.UNIT);
 	
-	// Score Tracker
-	distance.update(dt);
+	// Step score tracker forward
+	scoreTracker.update(dt);
 }
 
 window.draw = function () {
@@ -182,9 +181,9 @@ window.draw = function () {
 	
 	// Barriers
 	barrierManager.draw();
-
-	//Score Counter
-	distance.draw();
+	
+	// Score Tracker
+	scoreTracker.draw();
 	
 	input.debugDraw();
 }
