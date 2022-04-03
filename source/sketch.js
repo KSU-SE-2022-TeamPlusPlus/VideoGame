@@ -67,11 +67,16 @@ window.setup = function () {
 	
 	time = 0; // Time in seconds
 	
+	// Turns out that many of the key values are directly
+	// analagous to the codepoints of the characters they represent!
+	const inputKey = (key) => key.toUpperCase().codePointAt();
+	// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+	
 	input = new Input({
-		jump: { binding: 32,         }, // -> Space
-		up:   { binding: UP_ARROW,   },
-		down: { binding: DOWN_ARROW, },
-		mute: { binding: 0x23,       }, // -> End
+		jump: { binding: inputKey(' ') }, // -> Space key
+		up:   { binding: UP_ARROW      },
+		down: { binding: DOWN_ARROW    },
+		mute: { binding: inputKey('M') }, // -> 'M' for Mute
 	});
 	
 	colorMode(RGB, 1); // Change color format
