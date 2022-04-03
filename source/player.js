@@ -26,7 +26,7 @@ export class Player {
 		this.grounded = true;
 		
 		this.currentLane = 0;
-		this.laneSwitchRepeat = new Timer(1/10);
+		this.laneSwitchRepeat = new Timer(1/6);
 	}
 	
 	// Controls the player with an Input object.
