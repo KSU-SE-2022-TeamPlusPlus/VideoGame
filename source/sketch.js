@@ -15,9 +15,6 @@ import { ScoreTracker } from "./scoreTracker.js";
 // Runaway Ball, Roll On!! (working title???)
 // Team++
 
-//Global Variables
-var backMusicOn = false; //don't start with background music
-
 // Environment
 const CANVAS_SIZE = new p5.Vector(800, 400);
 let time = 0;
@@ -90,7 +87,7 @@ window.setup = function () {
 	// Make barriers
 	barrierManager = new BarrierManager();
 	barrierManager.pushBarrier("brickwall");
-
+	
 	// Make score tracker object
 	scoreTracker = new ScoreTracker();
 }
@@ -126,25 +123,14 @@ function update() {
 	}
 	
 	if (input.justPressed('mute')) {
-	//	WORLD.soundsEnabled = !WORLD.soundsEnabled;
-	//	backgroundMusic.play();
-		// TODO: doesn't restart bg music
-
-		// Start music
-		if (WORLD.soundsEnabled) {			
-				backgroundMusic.pause();
-				//backMusicOn = false;
-				WORLD.soundsEnabled = !WORLD.soundsEnabled;
-			}
-			else{
-				backgroundMusic.play();
-				//backMusicOn = true;
-				WORLD.soundsEnabled = true;
-			}
-		
+		// Start/stop music
+		WORLD.soundsEnabled = !WORLD.soundsEnabled;
+		if (WORLD.soundsEnabled) {
+			backgroundMusic.play();
+		} else {
+			backgroundMusic.pause();
+		}
 	}
-
-	
 	
 	player.control(dt, input);
 	

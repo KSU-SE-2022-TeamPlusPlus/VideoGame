@@ -29,8 +29,7 @@ export class Runner {
 	update(dt) {
 		if (WORLD.soundsEnabled) {
 			Runner.sfxBark.play();
-		}
-		else{
+		} else {
 			Runner.sfxBark.pause();
 		}
 		
