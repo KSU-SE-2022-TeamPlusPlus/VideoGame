@@ -59,8 +59,8 @@ export class Input {
 		pop();
 	}
 	
-	// Use inside p5's keyPressed function.
-	keyPressed() {
+	// Supply a keycode, typically from p5's keyPressed function.
+	pressKey(keyCode) {
 		for (let action of Object.values(this.actions)) {
 			if (keyCode == action.binding) {
 				action.on = true;
@@ -68,8 +68,8 @@ export class Input {
 		}
 	}
 	
-	// Use inside p5's keyReleased function.
-	keyReleased() {
+	// Supply a keycode, typically from p5's keyReleased function.
+	releaseKey(keyCode) {
 		for (let action of Object.values(this.actions)) {
 			if (keyCode == action.binding) {
 				action.on = false;

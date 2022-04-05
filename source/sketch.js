@@ -180,9 +180,9 @@ window.draw = function () {
 }
 
 window.keyPressed = function () {
-	if (input) input.keyPressed();
+	if (input) input.pressKey(keyCode);
 }
 
 window.keyReleased = function () {
-	if (input) input.keyReleased();
+	if (input) input.releaseKey(keyCode);
 }
