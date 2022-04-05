@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Team++ Test Runner</title>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+		html {
+			font-size: 14pt;
+			max-width: 64em;
+			margin: 1em auto;
+		}
+		ul.testResultList {
+			padding: 0;
+		}
+		li {
+			font-family: monospace;
+			white-space: pre-wrap;
+			
+			margin-block: 0 0.5em;
+		}
+		li.testResult {
+			display: block;
+			
+			color: black;
+			background: white;
+			
+			border: solid 1px currentColor;
+			border-left-width: 4px;
+			padding: 1em;
+		}
+		li.testResultSuccess { background: #aaffbb; }
+		li.testResultFailure { background: #ffbbaa; }
+		
+		strong.testTotal { background: #eee; }
+		strong.testTotalPass { background: #ccffdd; }
+		strong.testTotalFail { background: #ffddcc; }
+		
+		weak { opacity: 0.5; }
+		</style>
+	</head>
+	<body>
+		<h4>Welcome to the <em>official</em> Team++ test runner!</h4>
+		<p>ඞ There are failing tests among us... ඞ</p>
+		<ul class="testResultList"></ul>
+		<script src="tests/util.js"></script>
+		<script type="module">
+			import { TestRunner } from "./tests/runner.js";
+			
+			// vvv Put your test files here vvv
+			
+			import "./tests/testInput.js";
+			
+			// ^^^ Put your test files here ^^^
+			
+			document.addEventListener("DOMContentLoaded", ()=>{
+				let list = document.querySelector("ul.testResultList");
+				let testRunner = new TestRunner(list);
+				
+				for (const { name, tests } of TEST_GROUPS) {
+					testRunner.runTests(tests, name);
+				}
+				
+				testRunner.putMessage("<hr /><em>Grand Total</em>:");
+				let x = testRunner.finalMessage();
+				
+				// Should make webdriver testing a bit easier.
+				document.title = "Testing done: " + x.textContent;
+			});
+		</script>
+	</body>
+</html>
