@@ -3,7 +3,7 @@ import { BarrierManager } from "../source/barrierManager.js";
 
 const TIME_AMOUNT = 1/60;
 
-testGroup("barrier",
+testGroup2("barrier",
 	test("'loaded' event fires", function() {
 	
 		

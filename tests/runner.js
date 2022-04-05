@@ -38,6 +38,11 @@ export class TestRunner {
 			let passed = this.runTest(TEST);
 			setStat.bool(passed);
 		}
+//added below loop for testing
+		for (const TEST of testGroup2) {
+			let passed = this.runTest(TEST);
+			setStat.bool(passed);
+		}
 		
 		// n.remove();
 		

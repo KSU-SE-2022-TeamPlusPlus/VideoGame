@@ -49,3 +49,8 @@ function test(name, body) {
 function testGroup(name, ...tests) {
 	TEST_GROUPS.push({ name, tests, location: probe(2) });
 }
+ 
+//added to test joel's function
+function testGroup2(name, ...tests) {
+	TEST_GROUPS.push({ name, tests, location: probe(2) });
+}
