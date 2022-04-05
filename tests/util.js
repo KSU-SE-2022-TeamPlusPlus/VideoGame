@@ -3,12 +3,12 @@ function assert(thing, message = "assertion failed") {
 }
 function areEqual(left, right, message = "assertion failed") {
 	if (left !== right) {
-		throw new Error(message + `\n\tleft:  ${left},\n\tright: ${right}`);
+		throw new Error(message + `\n\tleft:  ${left}\n\tright: ${right}`);
 	}
 }
 function areNotEqual(left, right, message = "assertion failed") {
 	if (left === right) {
-		throw new Error(message + `\n\tleft:  ${left},\n\tright: ${right}`);
+		throw new Error(message + `\n\tleft:  ${left}\n\tright: ${right}`);
 	}
 }
 
@@ -47,10 +47,5 @@ function test(name, body) {
 	return { name, body, location: probe(2) };
 }
 function testGroup(name, ...tests) {
-	TEST_GROUPS.push({ name, tests, location: probe(2) });
-}
- 
-//added to test joel's function
-function testGroup2(name, ...tests) {
 	TEST_GROUPS.push({ name, tests, location: probe(2) });
 }

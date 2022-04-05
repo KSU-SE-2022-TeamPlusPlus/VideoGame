@@ -17,6 +17,14 @@ class TestStat {
 	}
 }
 
+// Helper function for extremely basic HTML sanitization.
+function sanitizeBadly(thing) {
+	return thing
+		.replaceAll("&", "&amp;")
+		.replaceAll("<", "&lt;")
+		.replaceAll(">", "&gt;");
+}
+
 // The test runner!!!
 export class TestRunner {
 	constructor(elem) {
@@ -26,6 +34,7 @@ export class TestRunner {
 		this.stat = new TestStat();
 	}
 	
+	// Run all tests in a group.
 	runTests(testGroup, groupName = "test group") {
 		// Show test group name
 		let n = this.putMessage(`Running <em>"${groupName}"</em> test group...`);
@@ -38,11 +47,6 @@ export class TestRunner {
 			let passed = this.runTest(TEST);
 			setStat.bool(passed);
 		}
-//added below loop for testing
-		for (const TEST of testGroup2) {
-			let passed = this.runTest(TEST);
-			setStat.bool(passed);
-		}
 		
 		// n.remove();
 		
@@ -50,12 +54,14 @@ export class TestRunner {
 		this.finalMessage(setStat);
 	}
 	
+	// Run a single test. Should be passed a test object, which consists of
+	// a name and a body. (And a location, but that's secret!!)
 	runTest(test) {
 		let passed;
 		
 		// Create "running" message
 		let n = this.putMessage(
-			`Running <em>"${test.name}"</em>...\n` +
+			`Running <em>"${sanitizeBadly(test.name)}"</em>...\n` +
 			`(If you see this, you're probably in an infinite loop.)`
 		);
 		
@@ -104,8 +110,10 @@ export class TestRunner {
 		point.classList.add("testResultSuccess");
 		
 		// Add the text.
-		point.innerHTML = `Test <em>"${test.name}"</em> passed! <weak>(${test.location})</weak>`;
-		if (info !== "") point.textContent += `\n${info}`;
+		point.innerHTML =
+			`Test <em>"${sanitizeBadly(test.name)}"</em> passed! ` +
+			`<weak>(${test.location})</weak>`;
+		if (info !== "") point.innerHTML += `\n${sanitizeBadly(info)}`;
 		
 		// Add it to the end of the list!
 		return this.listElem.appendChild(point);
@@ -119,18 +127,22 @@ export class TestRunner {
 		point.classList.add("testResult");
 		point.classList.add("testResultFailure");
 		
-		let stackTrace = error.stack
+		let stackTrace = error.stack.trim()
 			.split('\n') // Do a bad hack to remove...
 			.map(i => i.startsWith('@') ? i.substring(1) : i) // useless @s
-			.filter(i => !i.includes("tests/util.js")) // utility functions
-			.filter(i => !i.includes("tests/runner.js")) // test runner fns
+			.filter(i => !i.includes("/util.js")) // utility functions
+			.filter(i => !i.includes("/runner.js")) // test runner fns
+			.map(i => i.substring(i.lastIndexOf('/') + 1))    // long paths
 			.filter(i => !i.includes(".html"))         // any inline script
-			.join('\n'); // ...from stack trace.
+			.filter(i => !i.startsWith(":"))   // any inline script (again)
+			.join('\n\t'); // ...from stack trace. (Also indent!)
 		
 		// Add the text.
-		point.innerHTML = `Test <em>"${test.name}"</em> failed...`;
-		point.textContent += `\n${error}`;
-		point.textContent += `\nStack trace:\n${stackTrace}`;
+		point.innerHTML =
+			`Test <em>"${sanitizeBadly(test.name)}"</em> failed...\n` +
+			`${sanitizeBadly(error.name)}:\n` +
+			`\t${sanitizeBadly(error.message)}\n` +
+			`Stack trace:\n\t${sanitizeBadly(stackTrace)}`;
 		
 		// Add it to the end of the list!
 		return this.listElem.appendChild(point);
