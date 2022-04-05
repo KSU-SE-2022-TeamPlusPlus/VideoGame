@@ -18,6 +18,7 @@
 		li {
 			font-family: monospace;
 			white-space: pre-wrap;
+			tab-size: 4;
 			
 			margin-block: 0 0.5em;
 		}
@@ -31,6 +32,7 @@
 			border-left-width: 4px;
 			padding: 1em;
 		}
+		li:not(.testResult) { margin-left: 1em; }
 		li.testResultSuccess { background: #aaffbb; }
 		li.testResultFailure { background: #ffbbaa; }
 		
@@ -45,14 +47,15 @@
 		<h4>Welcome to the <em>official</em> Team++ test runner!</h4>
 		<p>ඞ There are failing tests among us... ඞ</p>
 		<ul class="testResultList"></ul>
-		<script src="tests/util.js"></script>
+		<!--horrible hack to supply global functions to tests-->
+		<script src="util.js"></script>
 		<script type="module">
-			import { TestRunner } from "./tests/runner.js";
+			import { TestRunner } from "./runner.js";
 			
 			// vvv Put your test files here vvv
 			
-			import "./tests/testInput.js";
-			import "./tests/testBarriers.js";
+			import "./testInput.js";
+			import "./testBarriers.js";
 			
 			// ^^^ Put your test files here ^^^
 			
@@ -60,10 +63,13 @@
 				let list = document.querySelector("ul.testResultList");
 				let testRunner = new TestRunner(list);
 				
+				// Fancy destructuring loop, to go through each test group
+				// we just imported, and run the tests within those groups.
 				for (const { name, tests } of TEST_GROUPS) {
 					testRunner.runTests(tests, name);
 				}
 				
+				// Change da world. My  finalMessage.  Goodb ye.
 				testRunner.putMessage("<hr /><em>Grand Total</em>:");
 				let x = testRunner.finalMessage();
 				
