@@ -4,12 +4,12 @@ import { BarrierManager } from "../source/barrierManager.js";
 const TIME_AMOUNT = 1/60;
 
 testGroup("barrier",
-	test("'loaded' event fires", function() {
+	test("'Loaded VARIANT.brickwall' event fires", function() {
+		Barrier.preload();
 		
-		
-		assert(true);
+		assert(Barrier.VARIANTS.brickwall.image="assets/brickwall.png");
 	}),
-	test("'drawn correctly' event fires", function() {
+	test("'Drawn correctly' event fires", function() {
 		
 		
 		assert(false);
