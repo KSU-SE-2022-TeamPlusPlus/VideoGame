@@ -8,8 +8,7 @@ testGroup("barrier",
 		
 		assert(Barrier.VARIANTS.brickwall.image="assets/brickwall.png");
 	}),
-	test("VARIANT[tree stump] size is 50x50", function() {		
-		
-		assert(Barrier.VARIANTS.treeStump.size==(50,50));
+	test("VARIANT[tree stump] span is set", function() {		
+			assert(Barrier.VARIANTS.treeStump.span == 1 );
 	})
 );
