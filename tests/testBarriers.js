@@ -4,14 +4,12 @@ import { BarrierManager } from "../source/barrierManager.js";
 const TIME_AMOUNT = 1/60;
 
 testGroup("barrier",
-	test("'Loaded VARIANT.brickwall' event fires", function() {
-		Barrier.preload();
+	test("'Loaded VARIANT[brickwall]' successfully", function() {		
 		
 		assert(Barrier.VARIANTS.brickwall.image="assets/brickwall.png");
 	}),
-	test("'Drawn correctly' event fires", function() {
+	test("VARIANT[tree stump] size is 50x50", function() {		
 		
-		
-		assert(false);
+		assert(Barrier.VARIANTS.treeStump.size==(50,50));
 	})
 );
