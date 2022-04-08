@@ -70,10 +70,10 @@ window.setup = function () {
 	// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
 	
 	input = new Input({
-		jump: { binding: inputKey(' ') }, // -> Space key
-		up:   { binding: UP_ARROW      },
-		down: { binding: DOWN_ARROW    },
-		mute: { binding: inputKey('M') }, // -> 'M' for Mute
+		jump: inputKey(' '), // -> Space key
+		up:   UP_ARROW,
+		down: DOWN_ARROW,
+		mute: inputKey('M'), // -> 'M' for Mute
 	});
 	
 	colorMode(RGB, 1); // Change color format

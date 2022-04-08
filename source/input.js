@@ -3,6 +3,14 @@ export class Input {
 	constructor(actionsObject) {
 		this.actions = actionsObject;
 		
+		// Allow for simpler binding objects.
+		for (let action of Object.keys(this.actions)) {
+			let item = this.actions[action];
+			if (typeof item != "object") {
+				this.actions[action] = { binding: item };
+			}
+		}
+		
 		// Initialize everything else.
 		this.resetAll(false);
 	}
@@ -19,6 +27,8 @@ export class Input {
 	}
 	
 	// Updates each action's time and just* values.
+	// The justPressed/justReleased values and the time values will
+	// **only ever be updated inside this function**.
 	update(dt) {
 		for (let action of Object.values(this.actions)) {
 			action.justPressed = action.time == 0 && action.on;
@@ -76,6 +86,10 @@ export class Input {
 			}
 		}
 	}
+	
+	// Directly control an action.
+	pressAction(action)   { this.actions[action].on = true;  }
+	releaseAction(action) { this.actions[action].on = false; }
 	
 	// Not the prettiest utility functions:
 	
