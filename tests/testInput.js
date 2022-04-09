@@ -3,25 +3,27 @@ import { Input } from "../source/input.js";
 const TIME_AMOUNT = 1/60;
 
 testGroup("input",
-	test("'just pressed' event fires", function() {
-		let i = new Input({ foo: 1 });
+	test("'just pressed'/'released' events fire", function() {
+		let i = new Input({ foo: {}, bar: {} });
 		
 		// Push the button.
 		i.pressAction('foo'); i.update(TIME_AMOUNT);
 		
-		assert(i.justPressed('foo'));
-	}),
-	test("'just released' event fires", function() {
-		let i = new Input({ foo: 1 });
+		assert( i.justPressed('foo'));
+		assert(!i.justPressed('bar'));
+		assert(!i.justReleased('foo'));
+		assert(!i.justReleased('bar'));
 		
-		// Push the button.
-		i.pressAction('foo'); i.update(TIME_AMOUNT);
+		// Release the button.
 		i.releaseAction('foo'); i.update(TIME_AMOUNT);
 		
-		assert(i.justReleased('foo'));
+		assert(!i.justPressed('foo'));
+		assert(!i.justPressed('bar'));
+		assert( i.justReleased('foo'));
+		assert(!i.justReleased('bar'));
 	}),
 	test("key hold time is accurate", function() {
-		let i = new Input({ foo: 1 });
+		let i = new Input({ foo: {} });
 		
 		// is this a design flaw?
 		// that pressed/released only update when update is called?
@@ -41,5 +43,13 @@ testGroup("input",
 			i.update(TIME_AMOUNT);
 			areEqual(i.timePressed('foo'), 0);
 		}
+	}),
+	test("actions with same binding both react when key pressed", function() {
+		let i = new Input({ foo: 1, bar: 1 });
+		
+		i.pressKey(1); i.update(TIME_AMOUNT);
+		
+		assert(i.justPressed('foo'));
+		assert(i.justPressed('bar'));
 	})
 );
