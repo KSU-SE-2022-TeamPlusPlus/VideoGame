@@ -7,7 +7,7 @@
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/addons/p5.sound.min.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<style>
-		html {
+		body {
 			font-size: 14pt;
 			max-width: 64em;
 			margin: 1em auto;
@@ -44,8 +44,8 @@
 		</style>
 	</head>
 	<body>
-		<h4>Welcome to the <em>official</em> Team++ test runner!</h4>
-		<p>ඞ There are failing tests among us... ඞ</p>
+		<p><strong>Welcome to the <em>official</em> Team++ test runner!</strong></p>
+		<p>ඞ There may be failing tests among us... ඞ</p>
 		<ul class="testResultList"></ul>
 		<!--horrible hack to supply global functions to tests-->
 		<script src="util.js"></script>
@@ -56,7 +56,7 @@
 			
 			import "./testInput.js";
 			import "./testBarriers.js";
-			import "./testsounds.js";
+			import "./testSounds.js";
 			
 			// ^^^ Put your test files here ^^^
 			
@@ -64,14 +64,23 @@
 				let list = document.querySelector("ul.testResultList");
 				let testRunner = new TestRunner(list);
 				
+				// Timestamp!
+				let timerStart = performance.now();
+				
 				// Fancy destructuring loop, to go through each test group
 				// we just imported, and run the tests within those groups.
 				for (const { name, tests } of TEST_GROUPS) {
 					testRunner.runTests(tests, name);
 				}
 				
+				// Timestamp again!
+				let timerEnd = performance.now();
+				
 				// Change da world. My  finalMessage.  Goodb ye.
-				testRunner.putMessage("<hr /><em>Grand Total</em>:");
+				testRunner.putMessage(
+					`<hr /><em>Total Test Stats:</em>\n` +
+					`Took <strong>${(timerEnd - timerStart).toFixed(2)} ms</strong>.`
+				);
 				let x = testRunner.finalMessage();
 				
 				// Should make webdriver testing a bit easier.
