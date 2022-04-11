@@ -64,4 +64,94 @@ export class BarrierManager {
 			text(BARRIER.position.z.toFixed(2), 410, 20*i);
 		}
 	}
+	
+	dbgDrawBoxes() {
+		push();
+		
+		noFill();
+		stroke(1, 1, 1, 1/4);
+		strokeWeight(4);
+		
+		for (const BARRIER of this.barriers) {
+			BarrierManager.wiresBox(
+				BARRIER.position,
+				Barrier.VARIANTS[BARRIER.variant].boxSize
+			);
+		}
+		
+		pop();
+	}
+	
+	dbgDrawClosestLine() {
+		push();
+		
+		noFill();
+		stroke(1/2, 1/4, 1, 1/4);
+		strokeWeight(4);
+		
+		if (this.barriers.length <= 0) return;
+		
+		let [closestX, closestZ] =
+			this.barriers
+			.map(b => {
+				const V = Barrier.VARIANTS[b.variant];
+				return [b.position.x - V.boxSize.x / 2, b.position.z];
+			})
+			.filter(d => d[0] >= 0)
+			.sort((d1, d2) => d1[0] - d2[0])[0];
+		
+		let pos0 = WORLD.toScreen({ x: 0, y: 0, z: closestZ });
+		let posD = WORLD.toScreen({ x: closestX, y: 0, z: closestZ });
+		line(pos0.x, pos0.y, posD.x, posD.y);
+		
+		pop();
+	}
+	
+	// oh gosh
+	static wiresBox(bottomCenter, size) {
+		let size2 = size.copy().div(2);
+		let center = new p5.Vector(
+			bottomCenter.x,
+			bottomCenter.y + size2.y,
+			bottomCenter.z
+		);
+		
+		let bottomLeft = center.copy().sub(size2);
+		let topRight = center.copy().add(size2);
+		
+		// draw top / bottom of cube
+		beginShape(QUADS);
+		for (let i = 0; i < 2; i++) {
+			for (let j = 0; j < 4; j++) {
+				// foolish zig-zag index fix
+				let indX = (j >= 2 ? (5 - j) : j) & 1;
+				let indZ = ((j >= 2 ? (5 - j) : j) & 2) >> 1;
+				
+				let scr = WORLD.toScreen(new p5.Vector(
+					[bottomLeft.x, topRight.x][indX],
+					[bottomLeft.y, topRight.y][i],
+					[bottomLeft.z, topRight.z][indZ],
+				));
+				vertex(scr.x, scr.y);
+			}
+		}
+		endShape(CLOSE);
+		
+		// draw middle connecting lines
+		beginShape(LINES);
+		for (let j = 0; j < 4; j++) {
+			let indX = j & 1;
+			let indZ = (j & 2) >> 1;
+			
+			for (let i = 0; i < 2; i++) {
+				let scr = WORLD.toScreen(new p5.Vector(
+					[bottomLeft.x, topRight.x][indX],
+					[bottomLeft.y, topRight.y][i],
+					[bottomLeft.z, topRight.z][indZ],
+				));
+				vertex(scr.x, scr.y);
+			}
+		}
+		endShape();
+	}
 }

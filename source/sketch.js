@@ -180,6 +180,9 @@ window.draw = function () {
 	// Barriers
 	barrierManager.draw();
 	
+	barrierManager.dbgDrawBoxes();
+	barrierManager.dbgDrawClosestLine();
+	
 	// == Heads-Up Display ==
 	
 	// Score Tracker
