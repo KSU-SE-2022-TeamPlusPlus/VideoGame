@@ -141,6 +141,10 @@ function update() {
 	
 	// Move obstacles with background
 	barrierManager.update(dt, backgroundSpeed);
+
+	if (barrierManager.checkAgainstBarriers(player.position)) {
+		console.log("Hit!");
+	}
 	
 	// Wrap background
 	// TODO: code smell

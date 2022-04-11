@@ -12,6 +12,21 @@ export class BarrierManager {
 		);
 		this.spawnRate = new Timer(2);
 	}
+
+	checkAgainstBarriers(point) {
+		for (const BARRIER of this.barriers) {
+			const BARRIER_V = Barrier.VARIANTS[BARRIER.variant]
+			let pointRB = point.copy().sub(BARRIER.position);
+			if (
+				pointRB.x > -BARRIER_V.boxSize.x / 2 && pointRB.x < BARRIER_V.boxSize.x / 2
+				&& pointRB.y > -BARRIER_V.boxSize.y / 2 && pointRB.y < BARRIER_V.boxSize.y / 2
+				&& pointRB.z > -BARRIER_V.boxSize.z / 2 && pointRB.z < BARRIER_V.boxSize.z / 2
+			) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	// TODO: bgSpeed is strange here but whatever
 	update(dt, bgSpeed) {
@@ -30,8 +45,14 @@ export class BarrierManager {
 	
 	draw() {
 		// TODO: z-sorting?
+		let i = 0;
 		for (const BARRIER of this.barriers) {
+			++i;
 			BARRIER.draw();
+			text("X-Pos", 300, 20*i);
+			text(BARRIER.position.x.toFixed(2), 340, 20*i);
+			text("Z-Pos", 380, 20*i);
+			text(BARRIER.position.z.toFixed(2), 410, 20*i);
 		}
 	}
 }

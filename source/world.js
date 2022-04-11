@@ -5,7 +5,7 @@ export const WORLD = {
 	
 	ORIGIN: new p5.Vector(225, 324),
 	
-	Z_COEF: new p5.Vector(-1/8, -5/8),
+	Z_COEF: new p5.Vector(1/8, -5/8),
 	UNIT: 64,
 	
 	// `this` == WORLD inside functions defined in WORLD.
