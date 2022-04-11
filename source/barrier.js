@@ -8,32 +8,33 @@ import { WORLD } from "./world.js";
 export class Barrier {
 	static VARIANTS = {
 		brickwall: {
-			image: "assets/brickwall.png", // -> image path / image object
-			imageSize: new p5.Vector(123, 187), // -> how large the sprite is
-			boxSize: new p5.Vector(1.0, 1.0, 2.0), // How large the collision box is
-			offset: new p5.Vector(0, 48), // -> amount to offset the visuals (shouldn't affect the collisions)
-			//span: 2, // -> how many lanes this object spans (will use in the future?)
+			image: "assets/brickwall.png",
+			// -> image path / image object
+			imageSize: new p5.Vector(123, 187),
+			// -> how large the sprite should be drawn
+			boxSize: new p5.Vector(1.0, 1.0, 2.0),
+			// -> How large the collision box is (3d)
+			//  + z tells how many lanes the barrier will span (rounded up)
+			offset: new p5.Vector(-24, 48),
+			// -> Amount to offset the sprite (without effecting collisions)
 		},
 		lawnchair: {
 			image: "assets/lawnchair.png",
 			imageSize: new p5.Vector(100, 100),
 			boxSize: new p5.Vector(1.0, 1.0, 1.0),
 			offset: new p5.Vector(0, 16),
-			//span: 1,
 		},
 		jumpEnemy: {
 			image: "assets/jumper.gif",
 			imageSize: new p5.Vector(40, 40),
-			boxSize: new p5.Vector(1.0, 1.0, 1.0),
+			boxSize: new p5.Vector(0.5, 0.5, 0.8),
 			offset: new p5.Vector(0, 8),
-			//span: 1,
 		},
 		treeStump: {
 			image: "assets/treestump.png",
 			imageSize: new p5.Vector(50, 50),
-			boxSize: new p5.Vector(1.0, 1.0, 1.0),
+			boxSize: new p5.Vector(0.8, 0.8, 1.0),
 			offset: new p5.Vector(0, 16),
-			//span: 1,
 		},
 	};
 	

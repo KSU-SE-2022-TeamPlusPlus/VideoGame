@@ -163,6 +163,8 @@ window.draw = function () {
 	// Clear screen
 	background(0);
 	
+	// == World Objects ==
+	
 	// Wrapping background
 	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT + width), 0, width, height);
@@ -177,6 +179,8 @@ window.draw = function () {
 	
 	// Barriers
 	barrierManager.draw();
+	
+	// == Heads-Up Display ==
 	
 	// Score Tracker
 	scoreTracker.draw();

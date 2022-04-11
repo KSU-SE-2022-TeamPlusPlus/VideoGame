@@ -5,7 +5,7 @@ export const WORLD = {
 	
 	ORIGIN: new p5.Vector(225, 324),
 	
-	Z_COEF: new p5.Vector(1/8, -5/8),
+	Z_COEF: new p5.Vector(3/8, -5/8),
 	UNIT: 64,
 	
 	// `this` == WORLD inside functions defined in WORLD.
@@ -23,7 +23,7 @@ export const WORLD = {
 	// Takes a 2D vector, outputs... a "3D" vector.
 	// Only on XZ plane, sorry. Y component'll be 0.
 	toWorld: function(v) {
-		// TODO: this is not usable!!! fix pls!
+		throw new Error("TODO: not implemented");
 		return new p5.Vector(
 			v.x / +this.UNIT,
 			0,
@@ -35,6 +35,7 @@ export const WORLD = {
 	dbgDrawGrid() {
 		push();
 		
+		noFill();
 		stroke(0.125, 0.5, 0.25, 0.25);
 		strokeWeight(4);
 		
@@ -47,7 +48,7 @@ export const WORLD = {
 		}
 		
 		// horizontal lines
-		for (let z = -2; z <= 2; z++) {
+		for (let z = -1; z <= 1; z++) {
 			let fromLine = this.toScreen( new p5.Vector( -3, 0, z ) );
 			let toLine   = this.toScreen( new p5.Vector( +8, 0, z ) );
 			
