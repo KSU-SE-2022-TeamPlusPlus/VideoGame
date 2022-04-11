@@ -19,10 +19,10 @@ export class BarrierManager {
 			let pointRB = point.copy().sub(BARRIER.position);
 			if (
 				pointRB.x > -BARRIER_V.boxSize.x / 2 && pointRB.x < BARRIER_V.boxSize.x / 2
-				&& pointRB.y > -BARRIER_V.boxSize.y / 2 && pointRB.y < BARRIER_V.boxSize.y / 2
+				&& pointRB.y >= 0 && pointRB.y < BARRIER_V.boxSize.y
 				&& pointRB.z > -BARRIER_V.boxSize.z / 2 && pointRB.z < BARRIER_V.boxSize.z / 2
 			) {
-				return true;
+				return BARRIER.variant;
 			}
 		}
 		return false;

@@ -142,8 +142,9 @@ function update() {
 	// Move obstacles with background
 	barrierManager.update(dt, backgroundSpeed);
 
-	if (barrierManager.checkAgainstBarriers(player.position)) {
-		console.log("Hit!");
+	let collision = barrierManager.checkAgainstBarriers(player.position); 
+	if (collision) {
+		console.log("It hit " + collision);
 	}
 	
 	// Wrap background
