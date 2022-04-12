@@ -8,8 +8,11 @@ export class BarrierManager {
 		this.spawnRate = new Timer(2);
 	}
 	
+	// push a new barrier into the internal list
 	pushBarrier(variant, ofs = 0) {
-		let laneRange = 3 - Math.ceil(Barrier.VARIANTS[variant].boxSize.z);
+		if (typeof variant == "string") variant = Barrier.VARIANTS[variant];
+		
+		let laneRange = 3 - Math.ceil(variant.boxSize.z);
 		let randomLane = Math.round(random(laneRange)) - laneRange / 2;
 		this.barriers.push(
 			new Barrier(variant, createVector(10 + ofs, 0, randomLane))
@@ -21,31 +24,37 @@ export class BarrierManager {
 	// for that, then
 	checkAgainstBarriers(point) {
 		for (const BARRIER of this.barriers) {
-			const BARRIER_V = Barrier.VARIANTS[BARRIER.variant];
+			const BOX = BARRIER.variant.boxSize;
+			
+			// moves the player position into the barrier's local space
+			// to make collision checks a bit easier to write / read.
 			let pointRB = point.copy().sub(BARRIER.position);
+			
 			if (
-				pointRB.y >= 0
-				&& pointRB.y < +BARRIER_V.boxSize.y
-				&& pointRB.x > -BARRIER_V.boxSize.x / 2
-				&& pointRB.x < +BARRIER_V.boxSize.x / 2
-				&& pointRB.z > -BARRIER_V.boxSize.z / 2
-				&& pointRB.z < +BARRIER_V.boxSize.z / 2
+				pointRB.y >= 0            && pointRB.y < +BOX.y
+				&& pointRB.x > -BOX.x / 2 && pointRB.x < +BOX.x / 2
+				&& pointRB.z > -BOX.z / 2 && pointRB.z < +BOX.z / 2
 			) {
-				return BARRIER.variant;
+				return BARRIER.variant.name;
+				// -> collided with this barrier
 			}
 		}
 		return null; // -> didn't collide with any barrier
 	}
 	
-	// TODO: bgSpeed is strange here but whatever
-	update(dt, bgSpeed) {
+	update(dt, scrollSpeed) {
 		for (let barrier of this.barriers) {
-			barrier.move(dt, bgSpeed);
+			barrier.move(dt, scrollSpeed);
 		}
 		
-		this.barriers = this.barriers.filter(b => b.position.x > -10);
+		// Remove all barriers that move off the right side of the screen
+		this.barriers = this.barriers.filter(b => b.position.x > -8);
 		
-		// TODO: no
+		// TODO: this could be a better spawning algorithm.
+		// currently it just spawns at a set interval, without regard to
+		// - what last two barriers it spawned (try to add some variety)
+		// - how large of a space is between previous barriers
+		// for now it's good enough, tho!
 		this.spawnRate.step(dt);
 		if (this.spawnRate.isTicked()) {
 			this.pushBarrier(random(Object.keys(Barrier.VARIANTS)), random(4));
@@ -53,7 +62,7 @@ export class BarrierManager {
 	}
 	
 	draw() {
-		// TODO: z-sorting?
+		// TODO: z-sorting
 		let i = 0;
 		for (const BARRIER of this.barriers) {
 			++i;
@@ -65,6 +74,7 @@ export class BarrierManager {
 		}
 	}
 	
+	// draws wireframe boxes over each barrier in the internal list
 	dbgDrawBoxes() {
 		push();
 		
@@ -73,51 +83,49 @@ export class BarrierManager {
 		strokeWeight(4);
 		
 		for (const BARRIER of this.barriers) {
-			BarrierManager.wiresBox(
-				BARRIER.position,
-				Barrier.VARIANTS[BARRIER.variant].boxSize
-			);
+			BarrierManager.wiresBox(BARRIER.position, BARRIER.variant.boxSize);
 		}
 		
 		pop();
 	}
 	
+	// draws a line between the player's origin and the nearest obstacle
 	dbgDrawClosestLine() {
+		let nearestBarrier = this.barriers
+			.filter(b => b.position.x >= 0)
+			.sort((b1, b2) => b1.position.x - b2.position.x)
+			[0];
+		if (!nearestBarrier) return;
+		
+		let closestX = nearestBarrier.position.x - nearestBarrier.variant.boxSize.x / 2;
+		let closestZ = nearestBarrier.position.z;
+		
+		let pos0 = WORLD.toScreen({ x: 0, y: 0, z: closestZ });
+		let posD = WORLD.toScreen({ x: closestX, y: 0, z: closestZ });
+		
 		push();
 		
 		noFill();
 		stroke(1/2, 1/4, 1, 1/4);
 		strokeWeight(4);
 		
-		if (this.barriers.length <= 0) return;
-		
-		let [closestX, closestZ] =
-			this.barriers
-			.map(b => {
-				const V = Barrier.VARIANTS[b.variant];
-				return [b.position.x - V.boxSize.x / 2, b.position.z];
-			})
-			.filter(d => d[0] >= 0)
-			.sort((d1, d2) => d1[0] - d2[0])[0];
-		
-		let pos0 = WORLD.toScreen({ x: 0, y: 0, z: closestZ });
-		let posD = WORLD.toScreen({ x: closestX, y: 0, z: closestZ });
 		line(pos0.x, pos0.y, posD.x, posD.y);
 		
 		pop();
 	}
 	
-	// oh gosh
+	// well i'm not gonna make this function very pretty
+	// draws a wireframe box with the specified origin point and size
 	static wiresBox(bottomCenter, size) {
-		let size2 = size.copy().div(2);
-		let center = new p5.Vector(
+		const SIZE2 = size.copy().div(2);
+		const CENTER = new p5.Vector(
 			bottomCenter.x,
-			bottomCenter.y + size2.y,
+			bottomCenter.y + SIZE2.y,
 			bottomCenter.z
 		);
 		
-		let bottomLeft = center.copy().sub(size2);
-		let topRight = center.copy().add(size2);
+		const BOTTOM_LEFT = CENTER.copy().sub(SIZE2);
+		const TOP_RIGHT = CENTER.copy().add(SIZE2);
 		
 		// draw top / bottom of cube
 		beginShape(QUADS);
@@ -128,9 +136,9 @@ export class BarrierManager {
 				let indZ = ((j >= 2 ? (5 - j) : j) & 2) >> 1;
 				
 				let scr = WORLD.toScreen(new p5.Vector(
-					[bottomLeft.x, topRight.x][indX],
-					[bottomLeft.y, topRight.y][i],
-					[bottomLeft.z, topRight.z][indZ],
+					[BOTTOM_LEFT.x, TOP_RIGHT.x][indX],
+					[BOTTOM_LEFT.y, TOP_RIGHT.y][i],
+					[BOTTOM_LEFT.z, TOP_RIGHT.z][indZ],
 				));
 				vertex(scr.x, scr.y);
 			}
@@ -145,9 +153,9 @@ export class BarrierManager {
 			
 			for (let i = 0; i < 2; i++) {
 				let scr = WORLD.toScreen(new p5.Vector(
-					[bottomLeft.x, topRight.x][indX],
-					[bottomLeft.y, topRight.y][i],
-					[bottomLeft.z, topRight.z][indZ],
+					[BOTTOM_LEFT.x, TOP_RIGHT.x][indX],
+					[BOTTOM_LEFT.y, TOP_RIGHT.y][i],
+					[BOTTOM_LEFT.z, TOP_RIGHT.z][indZ],
 				));
 				vertex(scr.x, scr.y);
 			}
