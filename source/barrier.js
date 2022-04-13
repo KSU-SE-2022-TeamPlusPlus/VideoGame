@@ -8,53 +8,60 @@ import { WORLD } from "./world.js";
 export class Barrier {
 	static VARIANTS = {
 		brickwall: {
-			image: "assets/brickwall.png", // -> image path / image object
-			imageSize: new p5.Vector(123, 187), // -> how large the sprite is
-			boxSize: new p5.Vector(1.0, 1.0, 2.0), // How large the collision box is
-			offset: new p5.Vector(0, 48), // -> amount to offset the visuals (shouldn't affect the collisions)
-			//span: 2, // -> how many lanes this object spans (will use in the future?)
+			image: "assets/brickwall.png",
+			// -> image path / image object
+			imageSize: new p5.Vector(123, 187),
+			// -> how large the sprite should be drawn
+			boxSize: new p5.Vector(1.0, 1.0, 2.0),
+			// -> How large the collision box is (3d)
+			//  + z tells how many lanes the barrier will span (rounded up)
+			offset: new p5.Vector(-16, 60),
+			// -> Amount to offset the sprite (without effecting collisions)
 		},
 		lawnchair: {
 			image: "assets/lawnchair.png",
 			imageSize: new p5.Vector(100, 100),
 			boxSize: new p5.Vector(1.0, 1.0, 1.0),
 			offset: new p5.Vector(0, 16),
-			//span: 1,
 		},
 		jumpEnemy: {
 			image: "assets/jumper.gif",
 			imageSize: new p5.Vector(40, 40),
-			boxSize: new p5.Vector(1.0, 1.0, 1.0),
+			boxSize: new p5.Vector(0.5, 0.5, 0.8),
 			offset: new p5.Vector(0, 8),
-			//span: 1,
 		},
 		treeStump: {
 			image: "assets/treestump.png",
 			imageSize: new p5.Vector(50, 50),
-			boxSize: new p5.Vector(1.0, 1.0, 1.0),
+			boxSize: new p5.Vector(0.8, 0.8, 1.0),
 			offset: new p5.Vector(0, 16),
-			//span: 1,
 		},
 	};
 	
 	static preload() {
 		for (let variant_k of Object.keys(Barrier.VARIANTS)) {
-			const variant = Barrier.VARIANTS[variant_k];
+			let variant = Barrier.VARIANTS[variant_k];
 			
-			// TODO: will there be a need for fancier image types?
-			// yes! the green Jumper is a barrier, but a moving one.
+			// Oops, we're missing out on the key string.
+			// Here's a quick hack.
+			variant.name = variant_k;
+			
+			// if not already a p5 Image, convert it to one.
+			// this is the "loading" part of the preload.
 			if (typeof variant.image == "string")
 				variant.image = loadImage(variant.image);
+			
+			// nobody else should mutate this table.
+			Object.freeze(variant);
 		}
 	}
 	
 	constructor(variant = "brickwall", startPos) {
-		const VARIANT_V = Barrier.VARIANTS[variant];
+		if (typeof variant == "string")
+			variant = Barrier.VARIANTS[variant];
+		
 		this.variant = variant;
 		this.position = startPos || new p5.Vector();
-		this.image = VARIANT_V.image;
-		this.offset = VARIANT_V.offset || new p5.Vector();
-		this.imageSize = VARIANT_V.imageSize.copy();
 	}
 	 
 	// Move the barrier horizontally a specified amount.
@@ -67,9 +74,9 @@ export class Barrier {
 	draw() {
 		push();
 		translate(WORLD.toScreen(this.position));
-		translate(this.offset);
-		translate(-this.imageSize.x / 2, -this.imageSize.y);
-		image(this.image, 0, 0, this.imageSize.x, this.imageSize.y);
+		translate(this.variant.offset);
+		translate(-this.variant.imageSize.x / 2, -this.variant.imageSize.y);
+		image(this.variant.image, 0, 0, this.variant.imageSize.x, this.variant.imageSize.y);
 		pop();
 	}
 };
