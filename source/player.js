@@ -1,3 +1,4 @@
+import { Runner } from "./runner.js";
 import { Timer } from "./timer.js";
 
 import { WORLD } from "./world.js";
@@ -110,5 +111,21 @@ export class Player {
 		image(Player.image, -0.5, -0.5, 1, 1);
 		
 		pop(); // Restore previous transform context
+		//this.showLocation();
 	}
+
+	
+
+		showLocation() {
+			text("X Position: ", 120, 15); // Draws text "High Score: " in top left of canvas
+			text(this.position.x, 180, 15); // Displays high score in top left
+			
+			text("Y Position: ", 200, 15);  // Draws text "Score: " in top right of canvas
+			text(this.position.y, 260, 15); // Displays score in top right
+
+		
+			text("test",280,15);
+
+		}
+	
 }
