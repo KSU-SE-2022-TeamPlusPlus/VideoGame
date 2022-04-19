@@ -109,10 +109,12 @@ export class TestRunner {
 		point.classList.add("testResult");
 		point.classList.add("testResultSuccess");
 		
+		let locationLink = "./" + test.location.replace(/:(\d+)/, "#$1");
+		
 		// Add the text.
 		point.innerHTML =
 			`Test <em>"${sanitizeBadly(test.name)}"</em> passed! ` +
-			`<weak>(${test.location})</weak>`;
+			`<weak>(<a href="${locationLink}">${test.location}</a>)</weak>`;
 		if (info !== "") point.innerHTML += `\n${sanitizeBadly(info)}`;
 		
 		// Add it to the end of the list!
