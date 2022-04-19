@@ -25,6 +25,94 @@ function sanitizeBadly(thing) {
 		.replaceAll(">", "&gt;");
 }
 
+// Question: Why is the longest function in the test runner
+// a function that makes stack traces look nice?
+// Answer: Sorry!
+function formatStackTrace(errorObject) {
+	let stackTrace = errorObject.stack;
+	
+	if (stackTrace.includes('@')) {
+		// Firefox-style stack traces.
+		
+		// assert@http://localhost:8000/tests/util.js:2:20
+		// @http://localhost:8000/tests/testSounds.js:42:9
+		// runTest@http://localhost:8000/tests/runner.js:126:15
+		// runTests@http://localhost:8000/tests/runner.js:102:22
+		// @http://localhost:8000/tests/:73:17
+		
+		// Let's filter out garbage from stack traces.
+		return stackTrace.split('\n')
+		// Also note this is all one really long line.
+		// I just split it in a bizarre way to improve readability.
+		
+		// First we should really trim all these elements.
+		.map(i => i.trim())
+		
+		//⬇ @ signs at the start of locations
+		.map(i => i.startsWith('@') ? i.substring(1) : i)
+		
+		//⬇ Functions from either the test runner or its utility functions
+		.filter(i => !i.includes("tests/util.js"))
+		.filter(i => !i.includes("tests/runner.js"))
+		
+		//⬇ Long lists of folders at the start of locations
+		.map(i => i.substring(i.indexOf("/", i.indexOf("//") + 2)))
+		
+		//⬇ Inline/anonymous scripts
+		.filter(i => !i.includes(".html"))
+		.filter(i => !i.includes("/:"))
+		
+		//⬇ Empty strings
+		.filter(i => i.length > 0)
+		
+		// Finally join the lines back together, adding indentation too!
+		.join('\n\t');
+		
+		// Why aren't stack traces standardized?
+		// Maybe if they were, they wouldn't be strings.
+	} else if (stackTrace.includes(errorObject.message)) {
+		// Chrome-style stack traces.
+		
+		// Error: assertion failed
+		//     at assert (util.js:2:20)
+		//     at Object.body (testSounds.js:42:3)
+		//     at TestRunner.runTest (runner.js:126:15)
+		//     at TestRunner.runTests (runner.js:102:22)
+		//     at HTMLDocument.<anonymous> ((index):73:17)
+		
+		// (yes, indented with four spaces.)
+		// (yes, the error message is... there too.)
+		
+		// Remove redundant error message and associated information.
+		let actualStart = stackTrace.indexOf(errorObject.message) + errorObject.message.length + 1;
+		stackTrace = stackTrace.substring(actualStart);
+		
+		return stackTrace.split('\n')
+		// Also note this is all one really long line.
+		// I just split it in a bizarre way to improve readability.
+		
+		// First we should really trim all these elements.
+		.map(i => i.trim())
+		
+		//⬇ Functions from either the test runner or its utility functions
+		.filter(i => !i.includes("tests/util.js"))
+		.filter(i => !i.includes("tests/runner.js"))
+		
+		//⬇ Inline/anonymous scripts
+		.filter(i => !i.includes("<anonymous>"))
+		
+		//⬇ Long lists of folders at the start of locations
+		.map(i => i.substring(i.indexOf("/", i.indexOf("//") + 2)))
+		
+		//⬇ That darn closing parenthesis
+		.map(i => i.substring(0, i.length - 1))
+		
+		.join('\n\t')
+	}
+	
+	return stackTrace;
+}
+
 // The test runner!!!
 export class TestRunner {
 	constructor(elem) {
@@ -109,10 +197,12 @@ export class TestRunner {
 		point.classList.add("testResult");
 		point.classList.add("testResultSuccess");
 		
+		let locationLink = "./" + test.location.replace(/:(\d+)/, "#$1");
+		
 		// Add the text.
 		point.innerHTML =
 			`Test <em>"${sanitizeBadly(test.name)}"</em> passed! ` +
-			`<weak>(${test.location})</weak>`;
+			`<weak>(<a href="${locationLink}">${test.location}</a>)</weak>`;
 		if (info !== "") point.innerHTML += `\n${sanitizeBadly(info)}`;
 		
 		// Add it to the end of the list!
@@ -127,15 +217,8 @@ export class TestRunner {
 		point.classList.add("testResult");
 		point.classList.add("testResultFailure");
 		
-		let stackTrace = error.stack.trim()
-			.split('\n') // Do a bad hack to remove...
-			.map(i => i.startsWith('@') ? i.substring(1) : i) // useless @s
-			.filter(i => !i.includes("/util.js")) // utility functions
-			.filter(i => !i.includes("/runner.js")) // test runner fns
-			.map(i => i.substring(i.lastIndexOf('/') + 1))    // long paths
-			.filter(i => !i.includes(".html"))         // any inline script
-			.filter(i => !i.startsWith(":"))   // any inline script (again)
-			.join('\n\t'); // ...from stack trace. (Also indent!)
+		// Remove garbage from stack trace.
+		let stackTrace = formatStackTrace(error);
 		
 		// Add the text.
 		point.innerHTML =

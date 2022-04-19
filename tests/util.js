@@ -27,8 +27,13 @@ function probe(skip = 2, showFullPath = false) {
 		// not wanting to inspect where you yourself are!!
 		// ...But if you do, you can always set skip to 1.
 		
+		let splitStack = e.stack.split('\n');
+		
+		// Dirty hack. Increment skip if you're on Chrome.
+		if (splitStack[1].trimStart().startsWith("at ")) skip++;
+		
 		// Anyway, yeah -- we only need one entry from this whole thing.
-		location = e.stack.split('\n')[skip];
+		location = splitStack[skip];
 		
 		if (showFullPath) // just erase the @, since it'll be anonymous.
 			location = location.substring(location.indexOf('@') + 1);
