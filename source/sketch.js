@@ -34,6 +34,9 @@ let player, runner;
 let barrierManager;
 let scoreTracker;
 
+// Volume
+let soundVol = 0.5;
+
 window.preload = function () {
 	// Load graphics
 	
@@ -74,6 +77,8 @@ window.setup = function () {
 		up:   UP_ARROW,
 		down: DOWN_ARROW,
 		mute: inputKey('M'), // -> 'M' for Mute
+		volUp: inputKey('O'),
+		volDown: inputKey('P'),
 	});
 	
 	colorMode(RGB, 1); // Change color format
@@ -132,6 +137,19 @@ function update() {
 		}
 	}
 	
+	if (input.justPressed('volUp')) {
+		if (soundVol < 0.9) {
+			soundVol += 0.1;
+			outputVolume(soundVol);
+		}
+	}
+	if (input.justPressed('volDown')) {
+		if (soundVol > 0.1) {
+			soundVol -= 0.1;
+			outputVolume(soundVol);
+		}
+	}
+
 	player.control(dt, input);
 	
 	// Physics & Animations
@@ -189,6 +207,9 @@ window.draw = function () {
 	scoreTracker.draw();
 	
 	input.debugDraw();
+
+	text("Volume: ", 730, 380);
+	text(soundVol.toFixed(1) * 10, 775, 380);
 }
 
 window.keyPressed = function () {
