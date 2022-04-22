@@ -1,6 +1,7 @@
 /// <reference path="../p5_definitions/p5.global-mode.d.ts" />
 
 // Utility
+import { DepthSort } from "./depthSort.js";
 import { Timer } from "./timer.js";
 import { Input } from "./input.js";
 import { WORLD } from "./world.js";
@@ -33,6 +34,7 @@ let input;
 let player, runner;
 let barrierManager;
 let scoreTracker;
+let depthSort;
 
 // Volume
 let soundVol = 0.5;
@@ -95,6 +97,9 @@ window.setup = function () {
 	
 	// Make score tracker object
 	scoreTracker = new ScoreTracker();
+	
+	// Make depth sort object
+	depthSort = new DepthSort();
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -193,11 +198,16 @@ window.draw = function () {
 	runner.draw();
 	
 	// Ball
-	player.draw();
+	depthSort.pushDraw(() => player.draw(), player.position.z);
 	
 	// Barriers
-	barrierManager.draw();
+	barrierManager.draw(depthSort);
 	
+	// Flush draw
+	depthSort.flushDraw();
+	
+	// Barriers -> Debug information
+	barrierManager.dbgDrawPositions();
 	barrierManager.dbgDrawBoxes();
 	barrierManager.dbgDrawClosestLine();
 	

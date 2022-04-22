@@ -1,4 +1,5 @@
 import { Barrier } from "./barrier.js";
+import { DepthSort } from "./depthSort.js";
 import { Timer } from "./timer.js";
 import { WORLD } from "./world.js";
 
@@ -61,12 +62,20 @@ export class BarrierManager {
 		}
 	}
 	
-	draw() {
-		// TODO: z-sorting
+	draw(sortObj) {
+		if (sortObj instanceof DepthSort) {
+			for (const BARRIER of this.barriers) {
+				sortObj.pushDraw(() => BARRIER.draw(), BARRIER.position.z);
+			}
+		} else {
+			this.barriers.forEach(b => b.draw());
+		}
+	}
+	
+	dbgDrawPositions() {
 		let i = 0;
 		for (const BARRIER of this.barriers) {
 			++i;
-			BARRIER.draw();
 			text("X-Pos", 300, 20*i);
 			text(BARRIER.position.x.toFixed(2), 340, 20*i);
 			text("Z-Pos", 380, 20*i);
