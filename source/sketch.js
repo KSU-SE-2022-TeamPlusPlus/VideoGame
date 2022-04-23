@@ -1,17 +1,11 @@
 /// <reference path="../p5_definitions/p5.global-mode.d.ts" />
 
 // Utility
-import { DepthSort } from "./depthSort.js";
-import { Timer } from "./timer.js";
 import { Input } from "./input.js";
 import { WORLD } from "./world.js";
-
-// Game Objects
-import { Runner } from "./runner.js";
-import { Player } from "./player.js";
-import { Barrier } from "./barrier.js";
-import { BarrierManager } from "./barrierManager.js";
-import { ScoreTracker } from "./scoreTracker.js";
+import { SceneManager } from "./scenes/sceneManager.js";
+import { GameScene } from "./scenes/gameScene.js";
+import { TitleScene } from "./scenes/titleScene.js";
 
 // Runaway Ball, Roll On!! (working title???)
 // Team++
@@ -20,39 +14,18 @@ import { ScoreTracker } from "./scoreTracker.js";
 const CANVAS_SIZE = new p5.Vector(800, 400);
 let time = 0;
 
-// Graphics
-let gfxBackground;
-
-// Animation
-var backgroundX = 0;
-var backgroundSpeed = 3; // how fast background moves
-
 let backgroundMusic;
 
 let input;
-
-let player, runner;
-let barrierManager;
-let scoreTracker;
-let depthSort;
+let sceneManager;
 
 // Volume
 let soundVol = 0.5;
 
 window.preload = function () {
-	// Load graphics
-	
-	gfxBackground = loadImage("assets/backyard pixel path.png");
-	
-	// Preload player / runner graphics
-	Player.preload();
-	Runner.preload();
-	
-	// Preload all barriers (see VARIANTS in Barrier for which files)
-	Barrier.preload();
-	
+	SceneManager.preload();
+
 	// Load & initialize audio
-	
 	// Tell p5 what file types we'll use for sounds (???)
 	soundFormats('mp3');
 	
@@ -86,20 +59,10 @@ window.setup = function () {
 	colorMode(RGB, 1); // Change color format
 	// Colors are now percentages from [0, 1]
 	// instead of numbers from [0, 256)
-	
-	// Make the player / runner
-	player = new Player();
-	runner = new Runner();
-	
-	// Make barriers
-	barrierManager = new BarrierManager();
-	barrierManager.pushBarrier("brickwall");
-	
-	// Make score tracker object
-	scoreTracker = new ScoreTracker();
-	
-	// Make depth sort object
-	depthSort = new DepthSort();
+
+
+	sceneManager = new SceneManager();
+	sceneManager.switchScene(TitleScene);	
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -155,79 +118,15 @@ function update() {
 		}
 	}
 
-	player.control(dt, input);
-	
-	// Physics & Animations
-	
-	player.update(dt);
-	runner.update(dt);
-	
-	// Move obstacles with background
-	barrierManager.update(dt, backgroundSpeed);
-
-	let collision = barrierManager.checkAgainstBarriers(player.position); 
-	if (collision) {
-		console.log("It hit " + collision.variant.name);
-	}
-	
-	// Wrap background
-	// TODO: code smell
-	backgroundX -= backgroundSpeed * dt;
-	if (backgroundX < -width / WORLD.UNIT)
-		backgroundX = backgroundX % (width / WORLD.UNIT);
-	
-	// Step score tracker forward
-	scoreTracker.update(dt);
+	sceneManager.currentScene.control(dt, input);
+	sceneManager.currentScene.update(dt);
 }
 
 window.draw = function () {
 	update();
-	
-	// Clear screen
-	background(0);
-	
-	// == World Objects ==
-	
-	// Wrapping background
-	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT), 0, width, height);
-	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT + width), 0, width, height);
-	
-	// Perspective Debug Information
-	WORLD.dbgDrawGrid();
-	
-	// First, draw the shadows.
-	
-	barrierManager.drawShadow(depthSort);
-	depthSort.pushDraw(() => runner.drawShadow(), runner.position.z);
-	depthSort.pushDraw(() => player.drawShadow(), player.position.z);
-	
-	// Flush draw
-	depthSort.flushDraw();
-	
-	// Next, draw the graphics.
-	
-	// Runner (Dog)
-	depthSort.pushDraw(() => runner.draw(), runner.position.z);
-	
-	// Player (Ball)
-	depthSort.pushDraw(() => player.draw(), player.position.z);
-	
-	// Barriers
-	barrierManager.draw(depthSort);
-	
-	// Flush draw
-	depthSort.flushDraw();
-	
-	// Barrier Debug Information
-	barrierManager.dbgDrawPositions();
-	barrierManager.dbgDrawBoxes();
-	barrierManager.dbgDrawClosestLine();
-	
-	// == Heads-Up Display ==
-	
-	// Score Tracker
-	scoreTracker.draw();
-	
+	console.log(width);
+	sceneManager.currentScene.draw();
+
 	input.debugDraw();
 
 	text("Volume: ", 730, 380);
