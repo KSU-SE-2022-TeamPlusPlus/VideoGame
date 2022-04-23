@@ -4,7 +4,10 @@ import { Timer } from "./timer.js";
 import { WORLD } from "./world.js";
 
 const PLAYER_HOME = new p5.Vector(225, 333); // bottom center
-const PLAYER_SIZE = new p5.Vector(40, 40);
+const PLAYER_SIZE = new p5.Vector(40, 40); // sprite size
+// in world-space, the player is 1/4th of a unit
+
+const PLAYER_SHADOW = 0.25;
 
 export class Player {
 	static image;
@@ -111,21 +114,20 @@ export class Player {
 		image(Player.image, -0.5, -0.5, 1, 1);
 		
 		pop(); // Restore previous transform context
-		//this.showLocation();
 	}
-
 	
-
-		showLocation() {
-			text("X Position: ", 120, 15); // Draws text "High Score: " in top left of canvas
-			text(this.position.x, 180, 15); // Displays high score in top left
-			
-			text("Y Position: ", 200, 15);  // Draws text "Score: " in top right of canvas
-			text(this.position.y, 260, 15); // Displays score in top right
-
+	drawShadow() {
+		WORLD.drawShadow(this.position, PLAYER_SHADOW);
+	}
+	
+	dbgDrawPosition() {
+		text("X Position: ", 120, 15);
+		text(this.position.x, 180, 15);
 		
-			text("test",280,15);
-
-		}
+		text("Y Position: ", 200, 15);
+		text(this.position.y, 260, 15);
+		
+		text("test",280,15);
+	}
 	
 }

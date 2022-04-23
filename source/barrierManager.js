@@ -50,12 +50,14 @@ export class BarrierManager {
 	}
 	
 	draw(sortObj) {
-		if (sortObj instanceof DepthSort) {
-			for (const BARRIER of this.barriers) {
-				sortObj.pushDraw(() => BARRIER.draw(), BARRIER.position.z);
-			}
-		} else {
-			this.barriers.forEach(b => b.draw());
+		for (const BARRIER of this.barriers) {
+			sortObj.pushDraw(() => BARRIER.draw(), BARRIER.position.z);
+		}
+	}
+	
+	drawShadow(sortObj) {
+		for (const BARRIER of this.barriers) {
+			sortObj.pushDraw(() => BARRIER.drawShadow(), BARRIER.position.z);
 		}
 	}
 	

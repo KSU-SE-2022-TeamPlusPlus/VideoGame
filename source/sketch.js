@@ -192,12 +192,24 @@ window.draw = function () {
 	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT + width), 0, width, height);
 	
+	// Perspective Debug Information
 	WORLD.dbgDrawGrid();
 	
-	// Runner
-	runner.draw();
+	// First, draw the shadows.
 	
-	// Ball
+	barrierManager.drawShadow(depthSort);
+	depthSort.pushDraw(() => runner.drawShadow(), runner.position.z);
+	depthSort.pushDraw(() => player.drawShadow(), player.position.z);
+	
+	// Flush draw
+	depthSort.flushDraw();
+	
+	// Next, draw the graphics.
+	
+	// Runner (Dog)
+	depthSort.pushDraw(() => runner.draw(), runner.position.z);
+	
+	// Player (Ball)
 	depthSort.pushDraw(() => player.draw(), player.position.z);
 	
 	// Barriers
@@ -206,7 +218,7 @@ window.draw = function () {
 	// Flush draw
 	depthSort.flushDraw();
 	
-	// Barriers -> Debug information
+	// Barrier Debug Information
 	barrierManager.dbgDrawPositions();
 	barrierManager.dbgDrawBoxes();
 	barrierManager.dbgDrawClosestLine();

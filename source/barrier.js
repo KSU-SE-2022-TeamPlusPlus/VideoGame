@@ -17,24 +17,35 @@ export class Barrier {
 			//  + z tells how many lanes the barrier will span (rounded up)
 			offset: new p5.Vector(-16, 60),
 			// -> Amount to offset the sprite (without effecting collisions)
+			shadow: "assets/brickwallShadow.png",
+			// -> Either a number (size in units), an image path / image object,
+			//    or just don't include this to not draw a shadow.
+			spawn: true,
+			// -> Should be put into spawn list.
 		},
 		lawnchair: {
 			image: "assets/lawnchair.png",
 			imageSize: new p5.Vector(100, 100),
 			boxSize: new p5.Vector(1.0, 1.0, 1.0),
-			offset: new p5.Vector(0, 16),
+			offset: new p5.Vector(0, 20),
+			shadow: "assets/lawnchairShadow.png",
+			spawn: true,
 		},
 		jumpEnemy: {
 			image: "assets/jumper.gif",
 			imageSize: new p5.Vector(40, 40),
 			boxSize: new p5.Vector(0.5, 0.5, 0.8),
 			offset: new p5.Vector(0, 8),
+			shadow: 1/4,
+			spawn: true,
 		},
 		treeStump: {
 			image: "assets/treestump.png",
 			imageSize: new p5.Vector(50, 50),
 			boxSize: new p5.Vector(0.8, 0.8, 1.0),
 			offset: new p5.Vector(0, 16),
+			shadow: 1/4,
+			spawn: true,
 		},
 	};
 	
@@ -52,6 +63,10 @@ export class Barrier {
 			// this is the "loading" part of the preload.
 			if (typeof variant.image == "string")
 				variant.image = loadImage(variant.image);
+			
+			// do the same for the shadow
+			if (typeof variant.shadow == "string")
+				variant.shadow = loadImage(variant.shadow);
 			
 			// Add this to the "spawnable variants" list.
 			if (variant.spawn)
@@ -85,6 +100,23 @@ export class Barrier {
 		translate(-this.variant.imageSize.x / 2, -this.variant.imageSize.y);
 		image(this.variant.image, 0, 0, this.variant.imageSize.x, this.variant.imageSize.y);
 		pop();
+	}
+	
+	// Draw the barrier's shadow.
+	drawShadow() {
+		if (!this.variant.shadow) return;
+		
+		if (typeof this.variant.shadow == "number") {
+			WORLD.drawShadow(this.position, this.variant.shadow);
+		} else {
+			push();
+			translate(WORLD.toScreen(this.position));
+			translate(this.variant.offset);
+			translate(-this.variant.imageSize.x / 2, -this.variant.imageSize.y);
+			tint(1, 1, 1, WORLD.SHADOW_OPACITY);
+			image(this.variant.shadow, 0, 0, this.variant.imageSize.x, this.variant.imageSize.y);
+			pop();
+		}
 	}
 	
 	// Simple collision check function.

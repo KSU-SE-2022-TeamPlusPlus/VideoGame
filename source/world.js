@@ -8,6 +8,8 @@ export const WORLD = {
 	Z_COEF: new p5.Vector(3/8, -5/8),
 	UNIT: 64,
 	
+	SHADOW_OPACITY: 0.4,
+	
 	// `this` == WORLD inside functions defined in WORLD.
 	
 	// Converts a vector to screen space.
@@ -29,6 +31,23 @@ export const WORLD = {
 			0,
 			v.y / -this.UNIT
 		);
+	},
+	
+	// Draw a shadow
+	drawShadow(position, size = 1/4) {
+		push(); // Push new transform context
+		
+		noStroke();
+		fill(0, 0, 0, WORLD.SHADOW_OPACITY);
+		
+		translate(WORLD.toScreen({ x: position.x, y: 0, z: position.z }));
+		scale(2, 0.75 - size / 4);
+		scale(1 - position.y / 6, 1 - position.y / 6);
+		scale(size * WORLD.UNIT);
+		
+		circle(0, 0, 1);
+		
+		pop(); // Restore previous transform context
 	},
 	
 	// Draw a grid
