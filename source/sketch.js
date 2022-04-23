@@ -1,6 +1,7 @@
 /// <reference path="../p5_definitions/p5.global-mode.d.ts" />
 
 // Utility
+import { DepthSort } from "./depthSort.js";
 import { Timer } from "./timer.js";
 import { Input } from "./input.js";
 import { WORLD } from "./world.js";
@@ -33,6 +34,7 @@ let input;
 let player, runner;
 let barrierManager;
 let scoreTracker;
+let depthSort;
 
 // Volume
 let soundVol = 0.5;
@@ -77,8 +79,8 @@ window.setup = function () {
 		up:   UP_ARROW,
 		down: DOWN_ARROW,
 		mute: inputKey('M'), // -> 'M' for Mute
-		volUp: inputKey('O'),
-		volDown: inputKey('P'),
+		volUp: inputKey('P'),
+		volDown: inputKey('O'),
 	});
 	
 	colorMode(RGB, 1); // Change color format
@@ -95,6 +97,9 @@ window.setup = function () {
 	
 	// Make score tracker object
 	scoreTracker = new ScoreTracker();
+	
+	// Make depth sort object
+	depthSort = new DepthSort();
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -162,7 +167,7 @@ function update() {
 
 	let collision = barrierManager.checkAgainstBarriers(player.position); 
 	if (collision) {
-		console.log("It hit " + collision);
+		console.log("It hit " + collision.variant.name);
 	}
 	
 	// Wrap background
@@ -187,17 +192,34 @@ window.draw = function () {
 	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT), 0, width, height);
 	image(gfxBackground, Math.round(backgroundX * WORLD.UNIT + width), 0, width, height);
 	
+	// Perspective Debug Information
 	WORLD.dbgDrawGrid();
 	
-	// Runner
-	runner.draw();
+	// First, draw the shadows.
 	
-	// Ball
-	player.draw();
+	barrierManager.drawShadow(depthSort);
+	depthSort.pushDraw(() => runner.drawShadow(), runner.position.z);
+	depthSort.pushDraw(() => player.drawShadow(), player.position.z);
+	
+	// Flush draw
+	depthSort.flushDraw();
+	
+	// Next, draw the graphics.
+	
+	// Runner (Dog)
+	depthSort.pushDraw(() => runner.draw(), runner.position.z);
+	
+	// Player (Ball)
+	depthSort.pushDraw(() => player.draw(), player.position.z);
 	
 	// Barriers
-	barrierManager.draw();
+	barrierManager.draw(depthSort);
 	
+	// Flush draw
+	depthSort.flushDraw();
+	
+	// Barrier Debug Information
+	barrierManager.dbgDrawPositions();
 	barrierManager.dbgDrawBoxes();
 	barrierManager.dbgDrawClosestLine();
 	
