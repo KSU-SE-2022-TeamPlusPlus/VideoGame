@@ -24,7 +24,7 @@ let soundVol = 0.5;
 
 window.preload = function () {
 	SceneManager.preload();
-
+	
 	// Load & initialize audio
 	// Tell p5 what file types we'll use for sounds (???)
 	soundFormats('mp3');
@@ -59,10 +59,9 @@ window.setup = function () {
 	colorMode(RGB, 1); // Change color format
 	// Colors are now percentages from [0, 1]
 	// instead of numbers from [0, 256)
-
-
+	
 	sceneManager = new SceneManager();
-	sceneManager.switchScene(TitleScene);	
+	sceneManager.switchScene(TitleScene);
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -117,18 +116,18 @@ function update() {
 			outputVolume(soundVol);
 		}
 	}
-
+	
 	sceneManager.currentScene.control(dt, input);
 	sceneManager.currentScene.update(dt);
 }
 
 window.draw = function () {
 	update();
-	console.log(width);
+	
 	sceneManager.currentScene.draw();
-
+	
 	input.debugDraw();
-
+	
 	text("Volume: ", 730, 380);
 	text(soundVol.toFixed(1) * 10, 775, 380);
 }
