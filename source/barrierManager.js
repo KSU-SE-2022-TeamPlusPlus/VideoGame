@@ -20,24 +20,11 @@ export class BarrierManager {
 		);
 	}
 	
-	// TODO: actually, should we accept a line between two points and
-	// check if that line is in the cube? i think i know the algorithm
-	// for that, then
 	checkAgainstBarriers(point) {
-		for (const BARRIER of this.barriers) {
-			const BOX = BARRIER.variant.boxSize;
-			
-			// moves the player position into the barrier's local space
-			// to make collision checks a bit easier to write / read.
-			let pointRB = point.copy().sub(BARRIER.position);
-			
-			if (
-				pointRB.y >= 0            && pointRB.y < +BOX.y
-				&& pointRB.x > -BOX.x / 2 && pointRB.x < +BOX.x / 2
-				&& pointRB.z > -BOX.z / 2 && pointRB.z < +BOX.z / 2
-			) {
-				return BARRIER.variant.name;
-				// -> collided with this barrier
+		for (let barrier of this.barriers) {
+			if (barrier.isTouching(point)) {
+				barrier.hit = true;
+				return barrier; // -> collided with this barrier
 			}
 		}
 		return null; // -> didn't collide with any barrier
@@ -58,7 +45,7 @@ export class BarrierManager {
 		// for now it's good enough, tho!
 		this.spawnRate.step(dt);
 		if (this.spawnRate.isTicked()) {
-			this.pushBarrier(random(Object.keys(Barrier.VARIANTS)), random(4));
+			this.pushBarrier(random(Barrier.SPAWN_LIST), random(4));
 		}
 	}
 	
@@ -88,10 +75,11 @@ export class BarrierManager {
 		push();
 		
 		noFill();
-		stroke(1, 1, 1, 1/4);
 		strokeWeight(4);
 		
 		for (const BARRIER of this.barriers) {
+			if (BARRIER.hit) stroke(1, 1/4, 1/2, 1/4);
+			else             stroke(1, 1, 1, 1/4);
 			BarrierManager.wiresBox(BARRIER.position, BARRIER.variant.boxSize);
 		}
 		

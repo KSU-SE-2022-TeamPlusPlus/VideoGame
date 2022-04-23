@@ -29,6 +29,7 @@ main > canvas {
 	margin: -1px;
 	border: solid 1px transparent;
 	display: block;
+	outline: none !important;
 }
 main > canvas:focus {
 	border-color: white;

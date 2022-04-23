@@ -38,6 +38,8 @@ export class Barrier {
 		},
 	};
 	
+	static SPAWN_LIST = [];
+	
 	static preload() {
 		for (let variant_k of Object.keys(Barrier.VARIANTS)) {
 			let variant = Barrier.VARIANTS[variant_k];
@@ -51,6 +53,10 @@ export class Barrier {
 			if (typeof variant.image == "string")
 				variant.image = loadImage(variant.image);
 			
+			// Add this to the "spawnable variants" list.
+			if (variant.spawn)
+				Barrier.SPAWN_LIST.push(variant_k);
+			
 			// nobody else should mutate this table.
 			Object.freeze(variant);
 		}
@@ -62,10 +68,11 @@ export class Barrier {
 		
 		this.variant = variant;
 		this.position = startPos || new p5.Vector();
+		this.hit = false;
 	}
 	 
 	// Move the barrier horizontally a specified amount.
-	// Barriers should move at the same speed as the background's.
+	// Barriers should move at the same speed as the background speed.
 	move(dt, amount) {
 		this.position.x = this.position.x - amount * dt;
 	}
@@ -78,5 +85,24 @@ export class Barrier {
 		translate(-this.variant.imageSize.x / 2, -this.variant.imageSize.y);
 		image(this.variant.image, 0, 0, this.variant.imageSize.x, this.variant.imageSize.y);
 		pop();
+	}
+	
+	// Simple collision check function.
+	// Used in barrierManager, too.
+	// Takes a 3D point representing the other body to collide against.
+	// Returns a boolean indicating if the point and box are colliding.
+	isTouching(point) {
+		// the collision hitbox of this barrier.
+		const BOX = this.variant.boxSize;
+		
+		// moves the player position into the barrier's local space
+		// to make collision checks a bit easier to write / read.
+		let pointLocal = point.copy().sub(this.position);
+		
+		// collision hitboxes are anchored at the bottom center.
+		// otherwise this is a bog-standard way of checking box collision.
+		return pointLocal.y >= 0     && pointLocal.y < +BOX.y
+		&& pointLocal.x > -BOX.x / 2 && pointLocal.x < +BOX.x / 2
+		&& pointLocal.z > -BOX.z / 2 && pointLocal.z < +BOX.z / 2;
 	}
 };

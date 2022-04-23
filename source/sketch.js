@@ -79,8 +79,8 @@ window.setup = function () {
 		up:   UP_ARROW,
 		down: DOWN_ARROW,
 		mute: inputKey('M'), // -> 'M' for Mute
-		volUp: inputKey('O'),
-		volDown: inputKey('P'),
+		volUp: inputKey('P'),
+		volDown: inputKey('O'),
 	});
 	
 	colorMode(RGB, 1); // Change color format
@@ -167,7 +167,7 @@ function update() {
 
 	let collision = barrierManager.checkAgainstBarriers(player.position); 
 	if (collision) {
-		console.log("It hit " + collision);
+		console.log("It hit " + collision.variant.name);
 	}
 	
 	// Wrap background
