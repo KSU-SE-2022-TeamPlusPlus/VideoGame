@@ -5,8 +5,7 @@ export class TitleScene extends AbstractScene {
 	static TITLE_IMAGE = null;
 	
 	static preload() {
-		this.TITLE_IMAGE = loadImage("../assets/backyard2.png");
-		
+		this.TITLE_IMAGE = loadImage("assets/backyard2.png");
 	}
 	
 	control(dt, input) {
