@@ -47,6 +47,13 @@ export class Barrier {
 			shadow: 1/4,
 			spawn: true,
 		},
+		explosion: {
+			image: "assets/explosion.gif",
+			imageSize: new p5.Vector(256, 256),
+			boxSize: new p5.Vector(),
+			offset: new p5.Vector(0, 16),
+			spawn: false,
+		},
 	};
 	
 	static SPAWN_LIST = [];
@@ -136,5 +143,10 @@ export class Barrier {
 		return pointLocal.y >= 0     && pointLocal.y < +BOX.y
 		&& pointLocal.x > -BOX.x / 2 && pointLocal.x < +BOX.x / 2
 		&& pointLocal.z > -BOX.z / 2 && pointLocal.z < +BOX.z / 2;
+	}
+
+	explosion() {
+		this.variant = Barrier.VARIANTS["explosion"];
+		this.variant.image.reset();
 	}
 };
