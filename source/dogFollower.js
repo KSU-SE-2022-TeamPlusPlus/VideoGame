@@ -2,7 +2,7 @@ import { Timer } from "./timer.js";
 
 import { WORLD } from "./world.js";
 
-const RUNNER_HOME_X = -2.5;
+const RUNNER_HOME_X = -2.0;
 const RUNNER_SIZE = new p5.Vector(150, 96);
 
 const RUNNER_SHADOW_SIZE = 0.7;

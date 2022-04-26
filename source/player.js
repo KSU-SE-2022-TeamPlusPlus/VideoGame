@@ -1,4 +1,4 @@
-import { Runner } from "./runner.js";
+import { Runner } from "./dogFollower.js";
 import { Timer } from "./timer.js";
 
 import { WORLD } from "./world.js";

@@ -7,7 +7,7 @@ import { WORLD } from "../world.js";
 
 // Game Objects
 import { Backdrop } from "../backdrop.js";
-import { Runner } from "../runner.js";
+import { Runner } from "../dogFollower.js";
 import { Player } from "../player.js";
 import { Barrier } from "../barrier.js";
 import { BarrierManager } from "../barrierManager.js";
@@ -15,9 +15,10 @@ import { ScoreTracker } from "../scoreTracker.js";
 
 export class GameScene extends AbstractScene {
 	static gfxBackground;
+	static sfxExplode;
 	
 	static preload() {
-		// Preload background
+		// Preload background		
 		Backdrop.preload();
 		
 		// Preload player / runner graphics
@@ -26,6 +27,10 @@ export class GameScene extends AbstractScene {
 		
 		// Preload all barriers (see VARIANTS in Barrier for which files)
 		Barrier.preload();
+
+		GameScene.sfxExplode = loadSound("assets/explosion.wav");
+		GameScene.sfxExplode.setVolume(1/2);
+		GameScene.sfxExplode.playMode("restart");
 	}
 	
 	enter(o) {
@@ -63,6 +68,12 @@ export class GameScene extends AbstractScene {
 		if (collision) {
 			console.log("It hit " + collision.variant.name);
 			return this.parent.switchScene(TitleScene);
+		}
+
+		let dogCollision = this.barrierManager.checkAgainstBarriers(this.runner.position);
+		if (dogCollision) {
+			dogCollision.explosion();
+			GameScene.sfxExplode.play();
 		}
 		
 		// Wrapping backdrop
