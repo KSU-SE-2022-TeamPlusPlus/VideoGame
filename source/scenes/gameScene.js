@@ -74,7 +74,7 @@ export class GameScene extends AbstractScene {
 		let dogCollision = this.barrierManager.checkAgainstBarriers(this.runner.position);
 		if (dogCollision) {
 			dogCollision.explosion();
-			GameScene.sfxExplode.play();
+			if (WORLD.soundsEnabled) { GameScene.sfxExplode.play(); }
 		}
 		
 		// Wrapping backdrop
@@ -98,7 +98,7 @@ export class GameScene extends AbstractScene {
 		this.backdrop.draw();
 		
 		// Perspective Debug Information
-		WORLD.dbgDrawGrid();
+		//WORLD.dbgDrawGrid();
 		
 		// First, draw the shadows.
 		
@@ -124,9 +124,9 @@ export class GameScene extends AbstractScene {
 		this.depthSort.flushDraw();
 		
 		// Barrier Debug Information
-		this.barrierManager.dbgDrawPositions();
-		this.barrierManager.dbgDrawBoxes();
-		this.barrierManager.dbgDrawClosestLine();
+		//this.barrierManager.dbgDrawPositions();
+		//this.barrierManager.dbgDrawBoxes();
+		//this.barrierManager.dbgDrawClosestLine();
 		
 		// == Heads-Up Display ==
 		

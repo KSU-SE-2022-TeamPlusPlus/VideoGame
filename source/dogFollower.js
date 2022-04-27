@@ -36,7 +36,7 @@ export class Runner {
 		} else {
 			Runner.sfxBark.pause();
 		}
-		
+		Runner.image.delay(50);
 		this.time += dt;
 		this.position.z = Math.sin(this.time * TAU) * 0.8;
 		// this.yOffset = Math.round(Math.abs(Math.sin(this.time * TAU * 16)) * 2);

@@ -127,10 +127,17 @@ window.draw = function () {
 	
 	sceneManager.currentScene.draw();
 	
-	// input.debugDraw();
-	
-	text("Volume: ", 730, 380);
-	text(soundVol.toFixed(1) * 10, 775, 380);
+	//input.debugDraw();
+	stroke(255,255,255);
+	textStyle(BOLD);
+	textSize(14);
+	text("Muted?: ", 705, 375);
+	if (WORLD.soundsEnabled) {
+		text("NO", 765, 375);
+	}
+	else { text("YES", 765, 375); }
+	text("Volume: ", 705, 395);
+	text(soundVol.toFixed(1) * 10, 765, 395);
 }
 
 window.keyPressed = function () {
