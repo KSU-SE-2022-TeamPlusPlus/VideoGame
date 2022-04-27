@@ -14,10 +14,10 @@ export class ScoreTracker {
 	
 	draw() {
 		text("High Score: ", 30, 15); // Draws text "High Score: " in top left of canvas
-		text(savedHighScore, 95, 15); // Displays high score in top left
+		text(savedHighScore, 110, 15); // Displays high score in top left
 		
 		text("Score: ", 700, 15);  // Draws text "Score: " in top right of canvas
-		text(this.score, 735, 15); // Displays score in top right
+		text(this.score, 745, 15); // Displays score in top right
 	}
 	
 	update(dt) {
