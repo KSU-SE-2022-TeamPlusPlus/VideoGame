@@ -1,6 +1,4 @@
 export const WORLD = {
-	soundsEnabled: false,
-	
 	GRAVITY: new p5.Vector(0, -6),
 	
 	ORIGIN: new p5.Vector(225, 324),

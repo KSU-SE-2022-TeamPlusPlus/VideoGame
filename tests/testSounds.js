@@ -18,13 +18,6 @@ testGroup("sound",
 		input.pressAction('jump');
 		input.update(TIME_AMOUNT);
 		
-		// Oops, V is bad at  design
-		// TODO: sound settings shouldn't ever have been in world.
-		// but then how do you--
-		// okay fine i guess i'm making source/sound.js. coming soon
-		let prevSoundsEnabled = WORLD.soundsEnabled;
-		WORLD.soundsEnabled = true;
-		
 		try {
 			// We've pressed the jump button,
 			// and we should inform the player object about that.
@@ -49,10 +42,6 @@ testGroup("sound",
 			// the player did not (attempt to) play the boing sound.
 			assert(error.message.includes("sfx") || error.message.includes("play"));
 		}
-		
-		// Reset soundsEnabled state,
-		// to allow other tests to mess with it as well.
-		WORLD.soundsEnabled = prevSoundsEnabled;
 	})
 )
 

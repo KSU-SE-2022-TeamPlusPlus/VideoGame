@@ -74,7 +74,7 @@ export class GameScene extends AbstractScene {
 		let dogCollision = this.barrierManager.checkAgainstBarriers(this.runner.position);
 		if (dogCollision) {
 			dogCollision.explosion();
-			if (WORLD.soundsEnabled) { GameScene.sfxExplode.play(); }
+			GameScene.sfxExplode.play();
 		}
 		
 		// Wrapping backdrop
