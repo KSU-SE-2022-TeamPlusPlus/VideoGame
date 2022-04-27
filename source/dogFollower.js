@@ -31,11 +31,7 @@ export class Runner {
 	}
 	
 	update(dt) {
-		if (WORLD.soundsEnabled) {
-			Runner.sfxBark.play();
-		} else {
-			Runner.sfxBark.pause();
-		}
+		Runner.sfxBark.play();
 		Runner.image.delay(50);
 		this.time += dt;
 		this.position.z = Math.sin(this.time * TAU) * 0.8;

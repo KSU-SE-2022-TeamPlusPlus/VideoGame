@@ -20,6 +20,7 @@ let input;
 let sceneManager;
 
 // Volume
+let soundMute = true;
 let soundVol = 0.5;
 
 window.preload = function () {
@@ -67,6 +68,11 @@ window.setup = function () {
 	// Make fonts nice and legible
 	textStyle(BOLD);
 	textSize(14);
+	
+	// Respect default sound volume
+	if (soundMute) outputVolume(0);
+	else outputVolume(soundVol);
+	backgroundMusic.play();
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -89,6 +95,7 @@ function update() {
 	
 	// Controls
 	
+	// Update controls
 	if (focused) {
 		// Update Input object
 		input.update(dt);
@@ -99,30 +106,28 @@ function update() {
 		input.resetAll(true);
 	}
 	
+	// Volume control
 	if (input.justPressed('mute')) {
-		// Start/stop music
-		WORLD.soundsEnabled = !WORLD.soundsEnabled;
-		if (WORLD.soundsEnabled) {
-			backgroundMusic.play();
+		soundMute = !soundMute;
+		if (soundMute) {
+			outputVolume(0);
 		} else {
-			backgroundMusic.pause();
-		}
-	}
-	
-	if (input.justPressed('volUp')) {
-		if (soundVol < 0.9) {
-			soundVol += 0.1;
 			outputVolume(soundVol);
 		}
+	}
+	if (input.justPressed('volUp')) {
+		soundVol = Math.min(soundVol + 0.1, 1);
+		outputVolume(soundMute ? 0 : soundVol);
 	}
 	if (input.justPressed('volDown')) {
-		if (soundVol > 0.1) {
-			soundVol -= 0.1;
-			outputVolume(soundVol);
-		}
+		soundVol = Math.max(0.1, soundVol - 0.1);
+		outputVolume(soundMute ? 0 : soundVol);
 	}
 	
+	// Send controls to state
 	sceneManager.currentScene.control(dt, input);
+	
+	// Update state
 	sceneManager.currentScene.update(dt);
 }
 
@@ -135,11 +140,8 @@ window.draw = function () {
 	
 	stroke(1);
 	
-	text("Muted?: ", 705, 375);
-	text(WORLD.soundsEnabled ? "YES" : "NO", 765, 375);
-	
 	text("Volume: ", 705, 395);
-	text(soundVol.toFixed(1) * 10, 765, 395);
+	text(soundMute ? "Muted" : (soundVol.toFixed(1) * 10), 765, 395);
 }
 
 window.keyPressed = function () {
