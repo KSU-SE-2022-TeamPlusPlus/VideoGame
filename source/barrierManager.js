@@ -108,7 +108,7 @@ export class BarrierManager {
 		stroke(1/2, 1/4, 1, 1/4);
 		strokeWeight(4);
 		
-		line(pos0.x, pos0.y, posD.x, posD.y);
+		//line(pos0.x, pos0.y, posD.x, posD.y);
 		
 		pop();
 	}
@@ -127,38 +127,38 @@ export class BarrierManager {
 		const TOP_RIGHT = CENTER.copy().add(SIZE2);
 		
 		// draw top / bottom of cube
-		beginShape(QUADS);
-		for (let i = 0; i < 2; i++) {
-			for (let j = 0; j < 4; j++) {
-				// foolish zig-zag index fix
-				let indX = (j >= 2 ? (5 - j) : j) & 1;
-				let indZ = ((j >= 2 ? (5 - j) : j) & 2) >> 1;
+		// beginShape(QUADS);
+		// for (let i = 0; i < 2; i++) {
+		// 	for (let j = 0; j < 4; j++) {
+		// 		// foolish zig-zag index fix
+		// 		let indX = (j >= 2 ? (5 - j) : j) & 1;
+		// 		let indZ = ((j >= 2 ? (5 - j) : j) & 2) >> 1;
 				
-				let scr = WORLD.toScreen(new p5.Vector(
-					[BOTTOM_LEFT.x, TOP_RIGHT.x][indX],
-					[BOTTOM_LEFT.y, TOP_RIGHT.y][i],
-					[BOTTOM_LEFT.z, TOP_RIGHT.z][indZ],
-				));
-				vertex(scr.x, scr.y);
-			}
-		}
-		endShape(CLOSE);
+		// 		let scr = WORLD.toScreen(new p5.Vector(
+		// 			[BOTTOM_LEFT.x, TOP_RIGHT.x][indX],
+		// 			[BOTTOM_LEFT.y, TOP_RIGHT.y][i],
+		// 			[BOTTOM_LEFT.z, TOP_RIGHT.z][indZ],
+		// 		));
+		// 		vertex(scr.x, scr.y);
+		// 	}
+		// }
+		// endShape(CLOSE);
 		
-		// draw middle connecting lines
-		beginShape(LINES);
-		for (let j = 0; j < 4; j++) {
-			let indX = j & 1;
-			let indZ = (j & 2) >> 1;
+		// // draw middle connecting lines
+		// beginShape(LINES);
+		// for (let j = 0; j < 4; j++) {
+		// 	let indX = j & 1;
+		// 	let indZ = (j & 2) >> 1;
 			
-			for (let i = 0; i < 2; i++) {
-				let scr = WORLD.toScreen(new p5.Vector(
-					[BOTTOM_LEFT.x, TOP_RIGHT.x][indX],
-					[BOTTOM_LEFT.y, TOP_RIGHT.y][i],
-					[BOTTOM_LEFT.z, TOP_RIGHT.z][indZ],
-				));
-				vertex(scr.x, scr.y);
-			}
-		}
-		endShape();
+		// 	for (let i = 0; i < 2; i++) {
+		// 		let scr = WORLD.toScreen(new p5.Vector(
+		// 			[BOTTOM_LEFT.x, TOP_RIGHT.x][indX],
+		// 			[BOTTOM_LEFT.y, TOP_RIGHT.y][i],
+		// 			[BOTTOM_LEFT.z, TOP_RIGHT.z][indZ],
+		// 		));
+		// 		vertex(scr.x, scr.y);
+		// 	}
+		// }
+		// endShape();
 	}
 }

@@ -54,6 +54,7 @@ window.setup = function () {
 		mute: inputKey('M'), // -> 'M' for Mute
 		volUp: inputKey('P'),
 		volDown: inputKey('O'),
+		title: inputKey('T'),
 	});
 	
 	colorMode(RGB, 1); // Change color format
@@ -126,7 +127,7 @@ window.draw = function () {
 	
 	sceneManager.currentScene.draw();
 	
-	input.debugDraw();
+	// input.debugDraw();
 	
 	text("Volume: ", 730, 380);
 	text(soundVol.toFixed(1) * 10, 775, 380);
