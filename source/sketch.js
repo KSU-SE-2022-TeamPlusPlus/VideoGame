@@ -63,6 +63,10 @@ window.setup = function () {
 	
 	sceneManager = new SceneManager();
 	sceneManager.switchScene(TitleScene);
+	
+	// Make fonts nice and legible
+	textStyle(BOLD);
+	textSize(14);
 }
 
 // This isn't necessarily required, but it does help separate state changes
@@ -128,14 +132,12 @@ window.draw = function () {
 	sceneManager.currentScene.draw();
 	
 	//input.debugDraw();
-	stroke(255,255,255);
-	textStyle(BOLD);
-	textSize(14);
+	
+	stroke(1);
+	
 	text("Muted?: ", 705, 375);
-	if (WORLD.soundsEnabled) {
-		text("NO", 765, 375);
-	}
-	else { text("YES", 765, 375); }
+	text(WORLD.soundsEnabled ? "YES" : "NO", 765, 375);
+	
 	text("Volume: ", 705, 395);
 	text(soundVol.toFixed(1) * 10, 765, 395);
 }
