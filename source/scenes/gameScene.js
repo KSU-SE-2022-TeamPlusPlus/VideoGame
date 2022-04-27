@@ -12,6 +12,7 @@ import { Player } from "../player.js";
 import { Barrier } from "../barrier.js";
 import { BarrierManager } from "../barrierManager.js";
 import { ScoreTracker } from "../scoreTracker.js";
+import { EndScene } from "./endScene.js";
 
 export class GameScene extends AbstractScene {
 	static gfxBackground;
@@ -67,7 +68,7 @@ export class GameScene extends AbstractScene {
 		let collision = this.barrierManager.checkAgainstBarriers(this.player.position);
 		if (collision) {
 			console.log("It hit " + collision.variant.name);
-			return this.parent.switchScene(TitleScene);
+			return this.parent.switchScene(EndScene);
 		}
 
 		let dogCollision = this.barrierManager.checkAgainstBarriers(this.runner.position);
