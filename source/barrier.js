@@ -72,8 +72,15 @@ export class Barrier {
 				variant.image = loadImage(variant.image);
 			
 			// do the same for the shadow
-			if (typeof variant.shadow == "string")
-				variant.shadow = loadImage(variant.shadow);
+			if (typeof variant.shadow == "string") {
+				variant.shadow = loadImage(variant.shadow,
+					loadedImage => {
+						// p5 stutters when the shadow is tinted,
+						// so we have to tint it ourselves.
+						Barrier.translucentImage(loadedImage);
+					}
+				);
+			}
 			
 			// Add this to the "spawnable variants" list.
 			if (variant.spawn)
@@ -117,10 +124,15 @@ export class Barrier {
 			WORLD.drawShadow(this.position, this.variant.shadow);
 		} else {
 			push();
+			
 			translate(WORLD.toScreen(this.position));
 			translate(this.variant.offset);
 			translate(-this.variant.imageSize.x / 2, -this.variant.imageSize.y);
-			tint(1, 1, 1, WORLD.SHADOW_OPACITY);
+			
+			// This unassuming line lags the whole darn game.
+			// tint(1, 1, 1, WORLD.SHADOW_OPACITY);
+			// Thankfully, all shadows loaded are now pre-tinted.
+			
 			image(this.variant.shadow, 0, 0, this.variant.imageSize.x, this.variant.imageSize.y);
 			pop();
 		}
@@ -148,5 +160,18 @@ export class Barrier {
 	explosion() {
 		this.variant = Barrier.VARIANTS["explosion"];
 		this.variant.image.reset();
+	}
+	
+	static translucentImage(img, alpha = WORLD.SHADOW_OPACITY) {
+		img.loadPixels();
+		
+		// Image consists of four elements per pixel, in RGBA order.
+		// We only want to modify the alpha (transparency) value.
+		let imgLen = img.width * img.height * 4;
+		for (let i = 0; i < imgLen; i += 4) {
+			img.pixels[i + 3] *= alpha;
+		}
+		
+		img.updatePixels();
 	}
 };
