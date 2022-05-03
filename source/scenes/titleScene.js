@@ -1,6 +1,8 @@
 import { AbstractScene } from "./abstractScene.js";
 import { GameScene } from "./gameScene.js";
 
+import { ScoreTracker } from "../scoreTracker.js";
+
 export class TitleScene extends AbstractScene {
 	static TITLE_IMAGE = null;
 	
@@ -14,22 +16,22 @@ export class TitleScene extends AbstractScene {
 			return;
 		}
 	}
-
-	update(dt) {
-
-	}
 	
-	draw() { 
-		image(TitleScene.TITLE_IMAGE, 0, 0, width, height);
+	update(dt) {
 		
 	}
-
-	enter() {
-		//button initialization here, also local variables
+	
+	draw() {
+		image(TitleScene.TITLE_IMAGE, 0, 0, width, height);
+	}
+	
+	enter(st) {
+		if (st instanceof ScoreTracker) {
+			this.scoreTracker = st;
+		}
 	}
 	
 	exit() {
-		//return variable that gets sent to enter of the next scene
+		return this.scoreTracker;
 	}
 }
-
