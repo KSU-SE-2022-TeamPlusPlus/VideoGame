@@ -34,7 +34,7 @@ export class GameScene extends AbstractScene {
 		GameScene.sfxExplode.playMode("restart");
 	}
 	
-	enter(o) {
+	enter(st) {
 		// How fast the game scrolls
 		this.scrollSpeed = 3;
 		
@@ -50,7 +50,8 @@ export class GameScene extends AbstractScene {
 		this.barrierManager.pushBarrier("brickwall");
 		
 		// Make score tracker object
-		this.scoreTracker = new ScoreTracker();
+		let highScore = (st instanceof ScoreTracker) ? st.highScore : 0;
+		this.scoreTracker = new ScoreTracker(highScore);
 		
 		// Make depth sort object
 		this.depthSort = new DepthSort();

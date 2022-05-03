@@ -2,6 +2,8 @@ import { AbstractScene } from "./abstractScene.js";
 import { TitleScene } from "./titleScene.js";
 import { GameScene } from "./gameScene.js";
 
+import { ScoreTracker } from "../scoreTracker.js";
+
 export class EndScene extends AbstractScene {
 	static END_GAME_IMAGE = null;
 	
@@ -20,20 +22,28 @@ export class EndScene extends AbstractScene {
 	}
 
 	update(dt) {
-
+		
 	}
 	
 	draw() { 
 		image(EndScene.END_GAME_IMAGE, 0, 0, width, height);
 		
+		if (this.scoreTracker instanceof ScoreTracker) {
+			text(`Your High Score: ${this.scoreTracker.highScore}`, 16, 16);
+			if (this.scoreTracker.newHighest) {
+				text("Congrats! It's a new high score!", 16, 32);
+			}
+		}
 	}
 
-	enter() {
-		//button initialization here, also local variables
+	enter(st) {
+		if (st instanceof ScoreTracker) {
+			this.scoreTracker = st;
+		}
 	}
 	
 	exit() {
-		//return variable that gets sent to enter of the next scene
+		return this.scoreTracker;
 	}
 }
 
