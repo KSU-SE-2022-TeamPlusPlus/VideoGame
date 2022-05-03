@@ -3,6 +3,7 @@ import { Timer } from "./timer.js";
 import { WORLD } from "./world.js";
 
 const RUNNER_HOME_X = -2.0;
+const RUNNER_OFFSET = new p5.Vector(0, 8);
 const RUNNER_SIZE = new p5.Vector(150, 96);
 
 const RUNNER_SHADOW_SIZE = 0.7;
@@ -42,6 +43,7 @@ export class Runner {
 		push();
 		translate(WORLD.toScreen(this.position));
 		translate(-RUNNER_SIZE.x / 2, -RUNNER_SIZE.y);
+		translate(RUNNER_OFFSET);
 		image(Runner.image, 0, 0 + this.yOffset, RUNNER_SIZE.x, RUNNER_SIZE.y);
 		pop();
 	}
