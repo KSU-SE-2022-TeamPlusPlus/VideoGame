@@ -8,10 +8,10 @@ The Video Game, for our project. This README file will be updated weekly dependi
 3. Open up the directory where the repo was cloned in your text editor.
 4. Run the `git pull` command to ensure you have the latest version of our code.
 5. Open up a terminal window, making sure you are in the project's root directory: `VideoGame/`
-6. In the terminal, run the command `python server.py` to start the local Python server.
-7. Navigate to `localhost:8000` on your computer in an internet browser to see what the game currently looks like.
-
-Make sure to test the game out before comitting!
+6. Install the dependencies for the local server using `python -m pip install -r requirements.txt` from this repository's root directory.
+	- After you do this the first time, you won't have to do it again. It doesn't hurt to run it again, though -- `pip` will skip over any already-installed libraries.
+7. In the terminal, run the command `python server.py` to start the local Python server.
+8. Navigate to `localhost:8000` on your computer in an internet browser to see what the game currently looks like.
 
 You can also run the most recent commit by going to [the GitHub Pages instance](https://ksu-se-2022-teamplusplus.github.io/VideoGame/), also linked in the sidebar.
 
