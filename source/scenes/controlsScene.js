@@ -1,16 +1,20 @@
 import { AbstractScene } from "./abstractScene.js";
 import { GameScene } from "./gameScene.js";
+import { TitleScene } from "./titleScene.js";
 
 export class ControlsScene extends AbstractScene {
 	static CONTROLS_IMAGE = null;
 	
 	static preload() {
-		this.CONTROLS_IMAGE = loadImage("assets/titleScreen.png");
+		ControlsScene.CONTROLS_IMAGE = loadImage("assets/controls.png");
 	}
 	
 	control(dt, input) {
 		if (input.justPressed('jump')) {
 			this.parent.switchScene(GameScene);
+			return;
+		} else if (input.justPressed('title')) {
+			this.parent.switchScene(TitleScene);
 			return;
 		}
 	}
