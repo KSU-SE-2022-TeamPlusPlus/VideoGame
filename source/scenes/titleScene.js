@@ -1,5 +1,5 @@
 import { AbstractScene } from "./abstractScene.js";
-import { GameScene } from "./gameScene.js";
+import { ControlsScene } from "./controlsScene.js";
 
 import { ScoreTracker } from "../scoreTracker.js";
 
@@ -12,7 +12,7 @@ export class TitleScene extends AbstractScene {
 	
 	control(dt, input) {
 		if (input.justPressed('jump')) {
-			this.parent.switchScene(GameScene);
+			this.parent.switchScene(ControlsScene);
 			return;
 		}
 	}

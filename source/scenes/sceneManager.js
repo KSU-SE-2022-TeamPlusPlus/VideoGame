@@ -1,10 +1,12 @@
 import { TitleScene } from "./titleScene.js";
 import { GameScene } from "./gameScene.js";
 import { EndScene } from "./endScene.js";
+import { ControlsScene } from "./controlsScene.js";
 
 export class SceneManager {
 	static GAME_SCENES = [
 		TitleScene,
+		ControlsScene,
 		GameScene,
 		EndScene,
 	];
